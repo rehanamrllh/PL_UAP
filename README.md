@@ -1,4 +1,4 @@
-# Sistem Manajemen Penghuni Kost 🏠
+# To-Do List Aplication
 
 Aplikasi GUI berbasis Java Swing untuk mengelola data penghuni kost secara efisien. Proyek ini dikembangkan untuk memenuhi **Ujian Akhir Praktikum (UAP) Pemrograman Lanjut 2025**.
 
