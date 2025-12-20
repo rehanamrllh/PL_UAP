@@ -1,99 +1,145 @@
-# 📝 To-Do List Manager Application
+# 📋 To-Do List Manager
 
-**Aplikasi Manajemen Tugas Modern dengan Java Swing**
+> **Modern Task Management Application built with Java Swing**
 
-Proyek ini dikembangkan untuk memenuhi **Ujian Akhir Praktikum (UAP) Pemrograman Lanjut 2025** - Universitas Muhammadiyah Malang.
+<div align="center">
+
+![Java](https://img.shields.io/badge/Java-11+-orange.svg)
+![Maven](https://img.shields.io/badge/Maven-3.6+-blue.svg)
+![License](https://img.shields.io/badge/License-Academic-green.svg)
+![Status](https://img.shields.io/badge/Status-Complete-success.svg)
+
+**UAP Pemrograman Lanjut 2025** | Universitas Muhammadiyah Malang
+
+[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Documentation](#-documentation)
+
+</div>
 
 ---
 
-## ✨ Highlights
+## 📸 Preview
 
-🎨 **Modern GUI** - Desain menarik dengan Java Swing
-💾 **Data Persistence** - Penyimpanan permanen dengan CSV
-🔍 **Smart Search** - Pencarian real-time dan filtering
-📊 **Statistics** - Dashboard dengan visualisasi data
-✅ **Complete CRUD** - Create, Read, Update, Delete
-🛡️ **Error Handling** - Exception handling komprehensif
+![Dashboard Preview](demo/screenshots/dashboard.png)
+*Dashboard with real-time statistics and quick actions.*
+
+![Task List Preview](demo/screenshots/task_list.png)
+*Interactive task list with sorting and filtering.*
+
+![Add Task Preview](demo/screenshots/add_task.png)
+>User-friendly form for adding and editing tasks.
+
+![History & Stats Preview](demo/screenshots/history_stats.png)
+>Visual representation of completed tasks and statistics.
 
 ---
 
-## 🚀 Quick Start
+## ✨ Features
+
+- **Modern GUI** with Java Swing
+- **Data Persistence** using CSV files
+- **Real-time Search** and filtering
+- **Statistics Dashboard** with visualizations
+- **Complete CRUD** functionality
+- **Comprehensive Error Handling**
+
+---
+
+## 🚀 Installation
+
+### Prerequisites
+
+- Java JDK 11 or higher
+- Maven 3.6+
+- An IDE of your choice (IntelliJ IDEA, Eclipse, VS Code, etc.)
+
+### Build & Run
 
 ```bash
+# Clone or download the project
 cd demo
+
+# Compile the project
 mvn clean compile
+
+# Run the application
 mvn exec:java -Dexec.mainClass="com.uap.ToDoListApp"
+
+# (Optional) Package the application
+mvn package
 ```
 
-**📖 Dokumentasi Lengkap:** Lihat [demo/INDEX.md](demo/INDEX.md)
+---
+
+## 📝 Usage
+
+1. **Run the application** using one of the methods above.
+2. **Add a new task** via the "Add Task" menu.
+3. **View all tasks** in the "Task List" section.
+4. **Edit a task** by double-clicking it or using the Edit button.
+5. **Delete a task** using the Delete button.
+6. **View history** in the "History" menu.
+
+**For detailed instructions:** Refer to the [USER_GUIDE.md](demo/USER_GUIDE.md)
 
 ---
 
-## 👥 Anggota Kelompok
-| Nama | Peran |
-| :--- | :--- |
-| **Rayhan Amrullah** | Developer |
-| **Ivan Nuryanto** | Developer |
+## 📚 Documentation
 
----
-
-## 📚 Dokumentasi
-
-Proyek ini dilengkapi dengan dokumentasi lengkap:
+This project comes with comprehensive documentation:
 
 ### 🎯 Start Here
-- **[INDEX.md](demo/INDEX.md)** - Panduan navigasi dokumentasi
-- **[QUICK_START.md](demo/QUICK_START.md)** - Cara menjalankan aplikasi
+- **[INDEX.md](demo/INDEX.md)** - Navigation guide for the documentation
+- **[QUICK_START.md](demo/QUICK_START.md)** - How to run the application
 
 ### 📖 Main Documentation
-- **[README_APP.md](demo/README_APP.md)** - Dokumentasi teknis lengkap
-- **[USER_GUIDE.md](demo/USER_GUIDE.md)** - Panduan pengguna (Bahasa Indonesia)
+- **[README_APP.md](demo/README_APP.md)** - Complete technical documentation
+- **[USER_GUIDE.md](demo/USER_GUIDE.md)** - User manual (in Bahasa Indonesia)
 
 ### ✅ UAP Requirements
-- **[DOKUMENTASI_KETENTUAN.md](demo/DOKUMENTASI_KETENTUAN.md)** - Pemenuhan ketentuan UAP
-- **[PROJECT_SUMMARY.md](demo/PROJECT_SUMMARY.md)** - Ringkasan proyek
+- **[DOKUMENTASI_KETENTUAN.md](demo/DOKUMENTASI_KETENTUAN.md)** - Compliance with UAP requirements
+- **[PROJECT_SUMMARY.md](demo/PROJECT_SUMMARY.md)** - Project summary
 
 ---
 
-## 🎯 Fitur Utama
+## 🎯 Main Features
 
 ### 1️⃣ Dashboard
-- Statistik real-time (Total, Completed, Pending, Completion Rate)
-- Quick actions untuk navigasi cepat
-- Visual cards dengan ikon
+- Real-time statistics (Total, Completed, Pending, Completion Rate)
+- Quick actions for fast navigation
+- Visual cards with icons
 
 ### 2️⃣ Task List
-- Tabel interaktif dengan sorting
+- Interactive table with sorting
 - Real-time search
 - Multi-filter (Status + Priority)
-- Double-click untuk edit
+- Double-click to edit
 
 ### 3️⃣ Add/Edit Task
-- Form input dengan validasi
-- Dropdown untuk Priority & Status
-- Error handling dengan dialog
+- Input form with validation
+- Dropdowns for Priority & Status
+- Error handling with dialog
 - Dual mode (Add/Edit)
 
 ### 4️⃣ History & Statistics
-- Completed tasks history
-- Completion rate tracking
-- Priority-based statistics
+- History of completed tasks
+- Tracking of completion rate
+- Statistics based on priority
 - Visual representation
 
 ---
 
-## 💻 Teknologi
+## 💻 Technologies Used
 
 - **Java 21** (compatible with 11+)
-- **Java Swing** untuk GUI
-- **Maven** untuk build management
-- **CSV** untuk data storage
-- **LocalDate** untuk date handling
-- **ArrayList & Stream API** untuk data manipulation
+- **Java Swing** for GUI
+- **Maven** for build management
+- **CSV** for data storage
+- **LocalDate** for date handling
+- **ArrayList & Stream API** for data manipulation
 
 ---
 
-## 📁 Struktur Proyek
+## 📁 Project Structure
 
 ```
 demo/
@@ -120,46 +166,46 @@ demo/
 
 ---
 
-## ✅ Pemenuhan Ketentuan UAP
+## ✅ Compliance with UAP Requirements
 
-| Ketentuan | Status | Implementasi |
-|-----------|--------|--------------|
-| **A. GUI Java Swing** | ✅ | 100% Swing components |
-| **B. 4+ Halaman** | ✅ | Dashboard, List, Input, History |
-| **C. CRUD Complete** | ✅ | Create, Read, Update, Delete |
-| **D. File Handling** | ✅ | CSV dengan auto-save |
-| **E. Sorting** | ✅ | Multi-column table sorting |
-| **F. Searching** | ✅ | Real-time search & filter |
-| **G. LocalDate** | ✅ | Date tracking |
-| **H. ArrayList** | ✅ | Dynamic data storage |
-| **I. Comparator** | ✅ | Custom sorting |
-| **J. Exception Handling** | ✅ | Comprehensive try-catch |
+| Requirement | Status | Implementation |
+|-------------|--------|----------------|
+| **A. Java Swing GUI** | ✅ | 100% Swing components used |
+| **B. 4+ Pages** | ✅ | Dashboard, List, Input, History |
+| **C. Complete CRUD** | ✅ | Create, Read, Update, Delete operations |
+| **D. File Handling** | ✅ | CSV format with auto-save feature |
+| **E. Sorting** | ✅ | Multi-column sorting in tables |
+| **F. Searching** | ✅ | Real-time search and filtering |
+| **G. LocalDate Usage** | ✅ | Proper date tracking implemented |
+| **H. ArrayList Usage** | ✅ | Dynamic data storage with ArrayList |
+| **I. Comparator Usage** | ✅ | Custom sorting implemented with Comparator |
+| **J. Exception Handling** | ✅ | Comprehensive try-catch blocks for error handling |
 
-**Compliance: 100% ✅**
+**Overall Compliance: 100% ✅**
 
 ---
 
 ## 🎨 Screenshots
 
 ### Dashboard
-- Modern interface dengan statistics cards
-- Color-coded information
-- Quick action buttons
+- Modern interface with statistics cards
+- Color-coded information for quick insights
+- Quick action buttons for fast navigation
 
 ### Task List
-- Sortable table
-- Real-time search
-- Filter by status & priority
+- Sortable and filterable table
+- Real-time search functionality
+- Filter by status and priority
 
 ### Input Form
-- Clean form layout
-- Input validation
-- User-friendly error messages
+- Clean and user-friendly form layout
+- Input validation with user-friendly error messages
+- Dropdowns for easy selection of priority and status
 
 ### History
-- Completed tasks overview
-- Visual statistics
-- Progress tracking
+- Overview of completed tasks
+- Visual statistics for performance tracking
+- Progress tracking over time
 
 ---
 
@@ -184,19 +230,6 @@ mvn exec:java -Dexec.mainClass="com.uap.ToDoListApp"
 # Package (optional)
 mvn package
 ```
-
----
-
-## 📝 Cara Penggunaan
-
-1. **Jalankan aplikasi** menggunakan salah satu method di atas
-2. **Tambah task baru** via menu "Add Task"
-3. **Lihat semua task** di "Task List"
-4. **Edit task** dengan double-click atau tombol Edit
-5. **Hapus task** dengan tombol Delete
-6. **Lihat history** di menu "History"
-
-**Detail lengkap:** [USER_GUIDE.md](demo/USER_GUIDE.md)
 
 ---
 
