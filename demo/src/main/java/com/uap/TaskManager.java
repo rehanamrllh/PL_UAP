@@ -6,10 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Manages CRUD operations for tasks and integrates with FileHandler.
- * Implements business logic and data validation.
- */
 public class TaskManager {
     private List<Task> tasks;
     private int nextId;
@@ -19,14 +15,10 @@ public class TaskManager {
         loadData();
     }
 
-    /**
-     * Load tasks from file
-     */
     private void loadData() {
         try {
             tasks = FileHandler.loadTasks();
 
-            // Calculate next ID
             nextId = tasks.stream()
                     .mapToInt(Task::getId)
                     .max()
@@ -40,9 +32,6 @@ public class TaskManager {
         }
     }
 
-    /**
-     * Save tasks to file
-     */
     public void saveData() throws IOException {
         try {
             FileHandler.saveTasks(tasks);
@@ -52,10 +41,7 @@ public class TaskManager {
         }
     }
 
-    /**
-     * CREATE - Add a new task
-     */
-    public Task addTask(String title, String description, String priority, String status)
+    public Task addTask(String title, String description, String priority, String status, java.time.LocalDate dueDate)
             throws IllegalArgumentException {
         // Validate input
         if (title == null || title.trim().isEmpty()) {
@@ -70,34 +56,25 @@ public class TaskManager {
             status = "PENDING";
         }
 
-        // Create new task
         Task task = new Task(nextId++, title.trim(), description.trim(),
-                priority.toUpperCase(), status.toUpperCase());
+                priority.toUpperCase(), status.toUpperCase(), dueDate);
         tasks.add(task);
 
-        // Save to file
         try {
             saveData();
             System.out.println("Task added: " + task);
             return task;
         } catch (IOException e) {
-            // Rollback if save fails
             tasks.remove(task);
             nextId--;
             throw new RuntimeException("Failed to save task: " + e.getMessage(), e);
         }
     }
 
-    /**
-     * READ - Get all tasks
-     */
     public List<Task> getAllTasks() {
         return new ArrayList<>(tasks);
     }
 
-    /**
-     * READ - Get task by ID
-     */
     public Task getTaskById(int id) {
         return tasks.stream()
                 .filter(t -> t.getId() == id)
@@ -105,29 +82,24 @@ public class TaskManager {
                 .orElse(null);
     }
 
-    /**
-     * UPDATE - Update existing task
-     */
     public boolean updateTask(int id, String title, String description,
-            String priority, String status) {
+            String priority, String status, java.time.LocalDate dueDate) {
         Task task = getTaskById(id);
         if (task == null) {
             System.err.println("Task not found: " + id);
             return false;
         }
 
-        // Validate input
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("Task title cannot be empty");
         }
 
-        // Update task fields
         task.setTitle(title.trim());
         task.setDescription(description.trim());
         task.setPriority(priority.toUpperCase());
         task.setStatus(status.toUpperCase());
+        task.setDueDate(dueDate);
 
-        // Save to file
         try {
             saveData();
             System.out.println("Task updated: " + task);
@@ -138,9 +110,6 @@ public class TaskManager {
         }
     }
 
-    /**
-     * DELETE - Delete task
-     */
     public boolean deleteTask(int id) {
         Task task = getTaskById(id);
         if (task == null) {
@@ -150,22 +119,17 @@ public class TaskManager {
 
         tasks.remove(task);
 
-        // Save to file
         try {
             saveData();
             System.out.println("Task deleted: " + task);
             return true;
         } catch (IOException e) {
-            // Rollback if save fails
             tasks.add(task);
             System.err.println("Failed to delete task: " + e.getMessage());
             throw new RuntimeException("Failed to delete task: " + e.getMessage(), e);
         }
     }
 
-    /**
-     * Search tasks by keyword (searches in title and description)
-     */
     public List<Task> searchTasks(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return getAllTasks();
@@ -178,9 +142,6 @@ public class TaskManager {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Filter tasks by status
-     */
     public List<Task> getTasksByStatus(String status) {
         if (status == null || status.trim().isEmpty() || "ALL".equalsIgnoreCase(status)) {
             return getAllTasks();
@@ -191,9 +152,6 @@ public class TaskManager {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Filter tasks by priority
-     */
     public List<Task> getTasksByPriority(String priority) {
         if (priority == null || priority.trim().isEmpty() || "ALL".equalsIgnoreCase(priority)) {
             return getAllTasks();
@@ -204,9 +162,6 @@ public class TaskManager {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get completed tasks (for history)
-     */
     public List<Task> getCompletedTasks() {
         return tasks.stream()
                 .filter(t -> "COMPLETED".equals(t.getStatus()))
@@ -215,18 +170,12 @@ public class TaskManager {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get pending tasks
-     */
     public List<Task> getPendingTasks() {
         return tasks.stream()
                 .filter(t -> !"COMPLETED".equals(t.getStatus()))
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Sort tasks by different criteria
-     */
     public List<Task> sortTasks(List<Task> taskList, String sortBy, boolean ascending) {
         List<Task> sortedList = new ArrayList<>(taskList);
 
@@ -273,9 +222,6 @@ public class TaskManager {
         }
     }
 
-    /**
-     * Get statistics
-     */
     public TaskStatistics getStatistics() {
         long total = tasks.size();
         long completed = tasks.stream().filter(t -> "COMPLETED".equals(t.getStatus())).count();
@@ -285,14 +231,10 @@ public class TaskManager {
         long highPriority = tasks.stream().filter(t -> "HIGH".equals(t.getPriority())).count();
         long mediumPriority = tasks.stream().filter(t -> "MEDIUM".equals(t.getPriority())).count();
         long lowPriority = tasks.stream().filter(t -> "LOW".equals(t.getPriority())).count();
-
         return new TaskStatistics(total, completed, pending, inProgress,
                 highPriority, mediumPriority, lowPriority);
     }
 
-    /**
-     * Inner class for statistics
-     */
     public static class TaskStatistics {
         public final long total;
         public final long completed;

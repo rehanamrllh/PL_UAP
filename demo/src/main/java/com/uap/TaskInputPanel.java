@@ -3,10 +3,11 @@ package com.uap;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Calendar;
 
-/**
- * Panel for adding and editing tasks with input validation.
- */
 public class TaskInputPanel extends JPanel {
     private TaskManager taskManager;
     private MainDashboard parent;
@@ -15,6 +16,8 @@ public class TaskInputPanel extends JPanel {
     private JTextArea descriptionArea;
     private JComboBox<String> priorityCombo;
     private JComboBox<String> statusCombo;
+    private JFormattedTextField dueDateField;
+    private JButton datePickerButton;
     private JButton saveButton;
     private JButton cancelButton;
     private JLabel formTitleLabel;
@@ -39,7 +42,6 @@ public class TaskInputPanel extends JPanel {
     }
 
     private void initComponents() {
-        // Title panel
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         titlePanel.setBackground(BACKGROUND_COLOR);
         formTitleLabel = new JLabel(" Add New Task");
@@ -49,11 +51,9 @@ public class TaskInputPanel extends JPanel {
 
         add(titlePanel, BorderLayout.NORTH);
 
-        // Form panel
         JPanel formPanel = createFormPanel();
         add(formPanel, BorderLayout.CENTER);
 
-        // Button panel
         JPanel buttonPanel = createButtonPanel();
         add(buttonPanel, BorderLayout.SOUTH);
     }
@@ -69,7 +69,6 @@ public class TaskInputPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        // Title field
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0;
@@ -83,7 +82,6 @@ public class TaskInputPanel extends JPanel {
         titleField.setPreferredSize(new Dimension(0, 35));
         mainPanel.add(titleField, gbc);
 
-        // Description field
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 0;
@@ -103,7 +101,6 @@ public class TaskInputPanel extends JPanel {
         descScrollPane.setBorder(BorderFactory.createLineBorder(new Color(189, 195, 199), 1));
         mainPanel.add(descScrollPane, gbc);
 
-        // Priority field
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 0;
@@ -115,13 +112,12 @@ public class TaskInputPanel extends JPanel {
 
         gbc.gridx = 1;
         gbc.weightx = 1.0;
-        priorityCombo = new JComboBox<>(new String[] { "HIGH", "MEDIUM", "LOW" });
+        priorityCombo = new JComboBox<>(new String[] { "High", "Medium", "Low" });
         priorityCombo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         priorityCombo.setPreferredSize(new Dimension(0, 35));
-        priorityCombo.setSelectedIndex(1); // Default to MEDIUM
+        priorityCombo.setSelectedIndex(1);
         mainPanel.add(priorityCombo, gbc);
 
-        // Status field
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.weightx = 0;
@@ -130,14 +126,67 @@ public class TaskInputPanel extends JPanel {
 
         gbc.gridx = 1;
         gbc.weightx = 1.0;
-        statusCombo = new JComboBox<>(new String[] { "PENDING", "IN_PROGRESS", "COMPLETED" });
+        statusCombo = new JComboBox<>(new String[] { "Pending", "In Progress", "Completed" });
         statusCombo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         statusCombo.setPreferredSize(new Dimension(0, 35));
         mainPanel.add(statusCombo, gbc);
 
-        // Required field note
         gbc.gridx = 0;
         gbc.gridy = 4;
+        gbc.weightx = 0;
+        JLabel dueDateLabel = createLabel("Due Date:");
+        mainPanel.add(dueDateLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        JPanel dueDatePanel = new JPanel(new BorderLayout(5, 0));
+        dueDatePanel.setBackground(CARD_COLOR);
+
+        dueDateField = new JFormattedTextField();
+        dueDateField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        dueDateField.setPreferredSize(new Dimension(0, 35));
+        dueDateField.setToolTipText("Format: YYYY-MM-DD");
+        dueDateField.setForeground(Color.BLACK);
+        dueDateField.setText("yyyy-mm-dd");
+
+        dueDateField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (dueDateField.getText().equals("yyyy-mm-dd")) {
+                    dueDateField.setText("");
+                    dueDateField.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                String text = dueDateField.getText().trim();
+                if (text.isEmpty() || text.equals("yyyy-mm-dd")) {
+                    dueDateField.setText("yyyy-mm-dd");
+                    dueDateField.setForeground(Color.BLACK);
+                } else {
+                    dueDateField.setForeground(Color.BLACK);
+                }
+            }
+        });
+
+        dueDatePanel.add(dueDateField, BorderLayout.CENTER);
+
+        datePickerButton = new JButton("...");
+        datePickerButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        datePickerButton.setPreferredSize(new Dimension(45, 35));
+        datePickerButton.setFocusPainted(false);
+        datePickerButton.setBackground(PRIMARY_COLOR);
+        datePickerButton.setForeground(Color.BLACK);
+        datePickerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        datePickerButton.setToolTipText("Choose date from calendar");
+        datePickerButton.addActionListener(e -> showDatePicker());
+        dueDatePanel.add(datePickerButton, BorderLayout.EAST);
+
+        mainPanel.add(dueDatePanel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
         gbc.gridwidth = 2;
         JLabel noteLabel = new JLabel("* Required fields");
         noteLabel.setFont(new Font("Segoe UI", Font.ITALIC, 12));
@@ -204,7 +253,6 @@ public class TaskInputPanel extends JPanel {
 
     private void saveTask() {
         try {
-            // Validate input
             String title = titleField.getText().trim();
             if (title.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
@@ -219,7 +267,21 @@ public class TaskInputPanel extends JPanel {
             String priority = (String) priorityCombo.getSelectedItem();
             String status = (String) statusCombo.getSelectedItem();
 
-            // Validate priority and status
+            LocalDate dueDate = null;
+            String dueDateText = dueDateField.getText().trim();
+            if (!dueDateText.isEmpty() && !dueDateText.equals("yyyy-mm-dd")) {
+                try {
+                    dueDate = LocalDate.parse(dueDateText, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                } catch (DateTimeParseException e) {
+                    JOptionPane.showMessageDialog(this,
+                            "Invalid date format! Please use YYYY-MM-DD format.",
+                            "Validation Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    dueDateField.requestFocus();
+                    return;
+                }
+            }
+
             if (priority == null || priority.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                         "Please select a priority!",
@@ -238,13 +300,17 @@ public class TaskInputPanel extends JPanel {
 
             boolean success;
             if (editingTask == null) {
-                // Add new task
-                Task newTask = taskManager.addTask(title, description, priority, status);
+                Task newTask = taskManager.addTask(title, description,
+                        convertToBackendFormat(priority),
+                        convertToBackendFormat(status),
+                        dueDate);
                 success = (newTask != null);
             } else {
-                // Update existing task
                 success = taskManager.updateTask(editingTask.getId(),
-                        title, description, priority, status);
+                        title, description,
+                        convertToBackendFormat(priority),
+                        convertToBackendFormat(status),
+                        dueDate);
             }
 
             if (success) {
@@ -279,8 +345,10 @@ public class TaskInputPanel extends JPanel {
     public void clearForm() {
         titleField.setText("");
         descriptionArea.setText("");
-        priorityCombo.setSelectedIndex(1); // Default to MEDIUM
-        statusCombo.setSelectedIndex(0); // Default to PENDING
+        priorityCombo.setSelectedIndex(1);
+        statusCombo.setSelectedIndex(0);
+        dueDateField.setText("YYYY-MM-DD");
+        dueDateField.setForeground(Color.BLACK);
         editingTask = null;
         formTitleLabel.setText(" Add New Task");
         saveButton.setText(" Save Task");
@@ -299,21 +367,250 @@ public class TaskInputPanel extends JPanel {
         titleField.setText(task.getTitle());
         descriptionArea.setText(task.getDescription());
 
-        // Set priority
         String priority = task.getPriority();
+        String priorityUI = convertToUIFormat(priority);
         for (int i = 0; i < priorityCombo.getItemCount(); i++) {
-            if (priorityCombo.getItemAt(i).equals(priority)) {
+            if (priorityCombo.getItemAt(i).equals(priorityUI)) {
                 priorityCombo.setSelectedIndex(i);
                 break;
             }
         }
 
-        // Set status
         String status = task.getStatus();
+        String statusUI = convertToUIFormat(status);
         for (int i = 0; i < statusCombo.getItemCount(); i++) {
-            if (statusCombo.getItemAt(i).equals(status)) {
+            if (statusCombo.getItemAt(i).equals(statusUI)) {
                 statusCombo.setSelectedIndex(i);
                 break;
+            }
+        }
+
+        if (task.getDueDate() != null) {
+            dueDateField.setText(task.getFormattedDueDate());
+            dueDateField.setForeground(Color.BLACK);
+        } else {
+            dueDateField.setText("yyyy-mm-dd");
+            dueDateField.setForeground(Color.GRAY);
+        }
+    }
+
+    private void showDatePicker() {
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Select Due Date", true);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel calendarPanel = new JPanel(new GridLayout(7, 7, 5, 5));
+        calendarPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        calendarPanel.setBackground(Color.WHITE);
+
+        Calendar calendar = Calendar.getInstance();
+        String currentDateText = dueDateField.getText().trim();
+        if (!currentDateText.isEmpty() && !currentDateText.equals("yyyy-mm-dd")) {
+            try {
+                LocalDate selectedDate = LocalDate.parse(currentDateText, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                calendar.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1, selectedDate.getDayOfMonth());
+            } catch (Exception e) {
+            }
+        }
+
+        final Calendar cal = (Calendar) calendar.clone();
+
+        JPanel monthPanel = new JPanel(new FlowLayout());
+        monthPanel.setBackground(PRIMARY_COLOR);
+
+        JButton prevButton = new JButton("◀");
+        prevButton.setFocusPainted(false);
+        prevButton.setBackground(PRIMARY_COLOR);
+        prevButton.setForeground(Color.WHITE);
+        prevButton.setBorderPainted(false);
+
+        JLabel monthLabel = new JLabel();
+        monthLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        monthLabel.setForeground(Color.BLACK);
+
+        JButton nextButton = new JButton("▶");
+        nextButton.setFocusPainted(false);
+        nextButton.setBackground(PRIMARY_COLOR);
+        nextButton.setForeground(Color.WHITE);
+        nextButton.setBorderPainted(false);
+
+        monthPanel.add(prevButton);
+        monthPanel.add(monthLabel);
+        monthPanel.add(nextButton);
+
+        Runnable updateCalendar = new Runnable() {
+            public void run() {
+                calendarPanel.removeAll();
+
+                String[] months = { "January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December" };
+                monthLabel.setText(months[cal.get(Calendar.MONTH)] + " " + cal.get(Calendar.YEAR));
+
+                String[] days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+                for (String day : days) {
+                    JLabel label = new JLabel(day, SwingConstants.CENTER);
+                    label.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                    label.setForeground(PRIMARY_COLOR);
+                    calendarPanel.add(label);
+                }
+
+                Calendar tempCal = (Calendar) cal.clone();
+                tempCal.set(Calendar.DAY_OF_MONTH, 1);
+                int firstDayOfWeek = tempCal.get(Calendar.DAY_OF_WEEK);
+                int daysInMonth = tempCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+                for (int i = 1; i < firstDayOfWeek; i++) {
+                    calendarPanel.add(new JLabel(""));
+                }
+
+                LocalDate today = LocalDate.now();
+                for (int day = 1; day <= daysInMonth; day++) {
+                    final int dayNum = day;
+                    JButton dayButton = new JButton(String.valueOf(day));
+                    dayButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                    dayButton.setFocusPainted(false);
+                    dayButton.setBackground(Color.WHITE);
+                    dayButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+                    LocalDate buttonDate = LocalDate.of(cal.get(Calendar.YEAR),
+                            cal.get(Calendar.MONTH) + 1, day);
+                    if (buttonDate.equals(today)) {
+                        dayButton.setBackground(new Color(230, 240, 255));
+                        dayButton.setForeground(PRIMARY_COLOR);
+                        dayButton.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                    }
+
+                    dayButton.addActionListener(e -> {
+                        LocalDate selectedDate = LocalDate.of(cal.get(Calendar.YEAR),
+                                cal.get(Calendar.MONTH) + 1,
+                                dayNum);
+                        dueDateField.setText(selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                        dueDateField.setForeground(Color.BLACK);
+                        dialog.dispose();
+                    });
+
+                    calendarPanel.add(dayButton);
+                }
+
+                calendarPanel.revalidate();
+                calendarPanel.repaint();
+            }
+        };
+
+        prevButton.addActionListener(e -> {
+            cal.add(Calendar.MONTH, -1);
+            updateCalendar.run();
+        });
+
+        nextButton.addActionListener(e -> {
+            cal.add(Calendar.MONTH, 1);
+            updateCalendar.run();
+        });
+
+        updateCalendar.run();
+
+        JPanel bottomPanel = new JPanel(new FlowLayout());
+        bottomPanel.setBackground(Color.WHITE);
+
+        JButton todayButton = new JButton("Today");
+        todayButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        todayButton.setBackground(ACCENT_COLOR);
+        todayButton.setForeground(Color.WHITE);
+        todayButton.setFocusPainted(false);
+        todayButton.setBorderPainted(false);
+        todayButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        todayButton.addActionListener(e -> {
+            LocalDate today = LocalDate.now();
+            dueDateField.setText(today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            dueDateField.setForeground(Color.BLACK);
+            dialog.dispose();
+        });
+
+        JButton clearButton = new JButton("Clear");
+        clearButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        clearButton.setBackground(SECONDARY_COLOR);
+        clearButton.setForeground(Color.WHITE);
+        clearButton.setFocusPainted(false);
+        clearButton.setBorderPainted(false);
+        clearButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        clearButton.addActionListener(e -> {
+            dueDateField.setText("yyyy-mm-dd");
+            dueDateField.setForeground(Color.GRAY);
+            dialog.dispose();
+        });
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        cancelButton.setBackground(new Color(127, 140, 141));
+        cancelButton.setForeground(Color.WHITE);
+        cancelButton.setFocusPainted(false);
+        cancelButton.setBorderPainted(false);
+        cancelButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        cancelButton.addActionListener(e -> dialog.dispose());
+
+        bottomPanel.add(todayButton);
+        bottomPanel.add(clearButton);
+        bottomPanel.add(cancelButton);
+
+        dialog.add(monthPanel, BorderLayout.NORTH);
+        dialog.add(calendarPanel, BorderLayout.CENTER);
+        dialog.add(bottomPanel, BorderLayout.SOUTH);
+
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    // Helper method to convert UI format to backend format
+    private String convertToBackendFormat(String uiValue) {
+        if (uiValue == null)
+            return null;
+        switch (uiValue) {
+            case "High":
+                return "HIGH";
+            case "Medium":
+                return "MEDIUM";
+            case "Low":
+                return "LOW";
+            case "Pending":
+                return "PENDING";
+            case "In Progress":
+                return "IN_PROGRESS";
+            case "Completed":
+                return "COMPLETED";
+            default:
+                return uiValue.toUpperCase().replace(" ", "_");
+        }
+    }
+
+    // Helper method to convert backend format to UI format
+    private String convertToUIFormat(String backendValue) {
+        if (backendValue == null)
+            return null;
+        switch (backendValue) {
+            case "HIGH":
+                return "High";
+            case "MEDIUM":
+                return "Medium";
+            case "LOW":
+                return "Low";
+            case "PENDING":
+                return "Pending";
+            case "IN_PROGRESS":
+                return "In Progress";
+            case "COMPLETED":
+                return "Completed";
+            default: {
+                // Convert SOME_TEXT to Some Text
+                String[] words = backendValue.toLowerCase().split("_");
+                StringBuilder result = new StringBuilder();
+                for (String word : words) {
+                    if (result.length() > 0)
+                        result.append(" ");
+                    result.append(Character.toUpperCase(word.charAt(0)));
+                    if (word.length() > 1)
+                        result.append(word.substring(1));
+                }
+                return result.toString();
             }
         }
     }

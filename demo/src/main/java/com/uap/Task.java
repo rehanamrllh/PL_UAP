@@ -3,23 +3,19 @@ package com.uap;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Model class representing a Task in the To-Do List application.
- * Implements Comparable for sorting functionality.
- */
 public class Task implements Comparable<Task> {
     private int id;
     private String title;
     private String description;
-    private String priority; // HIGH, MEDIUM, LOW
-    private String status; // PENDING, IN_PROGRESS, COMPLETED
+    private String priority; 
+    private String status; 
     private LocalDate createdDate;
     private LocalDate completedDate;
+    private LocalDate dueDate;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    // Constructor for new tasks
-    public Task(int id, String title, String description, String priority, String status) {
+    public Task(int id, String title, String description, String priority, String status, LocalDate dueDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -27,11 +23,11 @@ public class Task implements Comparable<Task> {
         this.status = status;
         this.createdDate = LocalDate.now();
         this.completedDate = null;
+        this.dueDate = dueDate;
     }
 
-    // Constructor for loading tasks from file
     public Task(int id, String title, String description, String priority, String status,
-            String createdDate, String completedDate) {
+            String createdDate, String completedDate, String dueDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -43,13 +39,16 @@ public class Task implements Comparable<Task> {
             this.completedDate = (completedDate != null && !completedDate.isEmpty())
                     ? LocalDate.parse(completedDate, DATE_FORMATTER)
                     : null;
+            this.dueDate = (dueDate != null && !dueDate.isEmpty())
+                    ? LocalDate.parse(dueDate, DATE_FORMATTER)
+                    : null;
         } catch (Exception e) {
             this.createdDate = LocalDate.now();
             this.completedDate = null;
+            this.dueDate = null;
         }
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -88,7 +87,7 @@ public class Task implements Comparable<Task> {
 
     public void setStatus(String status) {
         this.status = status;
-        if ("COMPLETED".equals(status) && completedDate == null) {
+        if ("Complete".equals(status) && completedDate == null) {
             this.completedDate = LocalDate.now();
         }
     }
@@ -109,7 +108,14 @@ public class Task implements Comparable<Task> {
         this.completedDate = completedDate;
     }
 
-    // Format dates for display
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
     public String getFormattedCreatedDate() {
         return createdDate != null ? createdDate.format(DATE_FORMATTER) : "";
     }
@@ -118,19 +124,22 @@ public class Task implements Comparable<Task> {
         return completedDate != null ? completedDate.format(DATE_FORMATTER) : "";
     }
 
-    // Convert to CSV format for file storage
+    public String getFormattedDueDate() {
+        return dueDate != null ? dueDate.format(DATE_FORMATTER) : "";
+    }
+
     public String toCSV() {
-        return String.format("%d,%s,%s,%s,%s,%s,%s",
+        return String.format("%d,%s,%s,%s,%s,%s,%s,%s",
                 id,
                 escapeCsv(title),
                 escapeCsv(description),
                 priority,
                 status,
                 getFormattedCreatedDate(),
-                getFormattedCompletedDate());
+                getFormattedCompletedDate(),
+                getFormattedDueDate());
     }
 
-    // Escape special characters in CSV
     private String escapeCsv(String value) {
         if (value == null)
             return "";
@@ -140,25 +149,22 @@ public class Task implements Comparable<Task> {
         return value;
     }
 
-    // Compare tasks for sorting (by priority and created date)
     @Override
     public int compareTo(Task other) {
-        // First compare by priority
         int priorityCompare = getPriorityValue(this.priority) - getPriorityValue(other.priority);
         if (priorityCompare != 0) {
             return priorityCompare;
         }
-        // Then by created date (newest first)
         return other.createdDate.compareTo(this.createdDate);
     }
 
     private int getPriorityValue(String priority) {
         switch (priority) {
-            case "HIGH":
+            case "High":
                 return 1;
-            case "MEDIUM":
+            case "Medium":
                 return 2;
-            case "LOW":
+            case "Low  ":
                 return 3;
             default:
                 return 4;
