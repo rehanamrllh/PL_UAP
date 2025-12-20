@@ -24,22 +24,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-/**
- * Main Dashboard with navigation menu.
- * This is the central hub of the application.
- */
+
 public class MainDashboard extends JFrame {
     private TaskManager taskManager;
     private JPanel contentPanel;
     private CardLayout cardLayout;
 
-    // Panels
     private TaskListPanel taskListPanel;
     private TaskInputPanel taskInputPanel;
     private HistoryPanel historyPanel;
     private DashboardHomePanel homePanel;
 
-    // Color scheme
     private static final Color PRIMARY_COLOR = new Color(41, 128, 185);
     private static final Color SECONDARY_COLOR = new Color(52, 73, 94);
     private static final Color ACCENT_COLOR = new Color(46, 204, 113);
@@ -56,7 +51,6 @@ public class MainDashboard extends JFrame {
 
         initComponents();
 
-        // Add window listener to save data on close
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -68,22 +62,18 @@ public class MainDashboard extends JFrame {
     private void initComponents() {
         setLayout(new BorderLayout());
 
-        // Create navigation panel (left side)
         JPanel navigationPanel = createNavigationPanel();
         add(navigationPanel, BorderLayout.WEST);
 
-        // Create content panel with CardLayout
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
         contentPanel.setBackground(BACKGROUND_COLOR);
 
-        // Initialize panels
         homePanel = new DashboardHomePanel(taskManager, this);
         taskListPanel = new TaskListPanel(taskManager, this);
         taskInputPanel = new TaskInputPanel(taskManager, this);
         historyPanel = new HistoryPanel(taskManager);
 
-        // Add panels to card layout
         contentPanel.add(homePanel, "HOME");
         contentPanel.add(taskListPanel, "TASK_LIST");
         contentPanel.add(taskInputPanel, "TASK_INPUT");
@@ -91,7 +81,6 @@ public class MainDashboard extends JFrame {
 
         add(contentPanel, BorderLayout.CENTER);
 
-        // Show home panel by default
         showPanel("HOME");
     }
 
@@ -101,7 +90,6 @@ public class MainDashboard extends JFrame {
         navPanel.setPreferredSize(new Dimension(250, 0));
         navPanel.setBackground(SECONDARY_COLOR);
 
-        // Logo/Title panel
         JPanel logoPanel = new JPanel();
         logoPanel.setBackground(PRIMARY_COLOR);
         logoPanel.setPreferredSize(new Dimension(250, 100));
@@ -114,13 +102,11 @@ public class MainDashboard extends JFrame {
 
         navPanel.add(logoPanel, BorderLayout.NORTH);
 
-        // Navigation buttons panel
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         buttonsPanel.setBackground(SECONDARY_COLOR);
         buttonsPanel.setBorder(BorderFactory.createEmptyBorder(20, 15, 20, 15));
 
-        // Create navigation buttons
         JButton btnHome = createNavButton(" Dashboard", "HOME");
         JButton btnTaskList = createNavButton(" Task List", "TASK_LIST");
         JButton btnAddTask = createNavButton(" Add Task", "TASK_INPUT");
@@ -138,7 +124,6 @@ public class MainDashboard extends JFrame {
 
         navPanel.add(buttonsPanel, BorderLayout.CENTER);
 
-        // Footer panel
         JPanel footerPanel = new JPanel();
         footerPanel.setBackground(SECONDARY_COLOR);
         footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
@@ -167,7 +152,6 @@ public class MainDashboard extends JFrame {
         button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Hover effect
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -188,7 +172,6 @@ public class MainDashboard extends JFrame {
     }
 
     public void showPanel(String panelName) {
-        // Refresh panels before showing
         if ("HOME".equals(panelName)) {
             homePanel.refreshStatistics();
         } else if ("TASK_LIST".equals(panelName)) {
@@ -203,9 +186,6 @@ public class MainDashboard extends JFrame {
     }
 
     public void showEditPanel(Task task) {
-        // Load task into the input form and show the input panel
-        // Use cardLayout.show directly to avoid showPanel("TASK_INPUT") calling
-        // clearForm() which would reset the editing state.
         taskInputPanel.loadTaskForEdit(task);
         cardLayout.show(contentPanel, "TASK_INPUT");
     }
@@ -226,7 +206,6 @@ public class MainDashboard extends JFrame {
         return taskManager;
     }
 
-    // Inner class for home dashboard
     class DashboardHomePanel extends JPanel {
         private TaskManager manager;
         private MainDashboard parent;
@@ -247,7 +226,6 @@ public class MainDashboard extends JFrame {
         }
 
         private void initComponents() {
-            // Title panel
             JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             titlePanel.setBackground(BACKGROUND_COLOR);
             JLabel titleLabel = new JLabel("Dashboard Overview");
@@ -257,12 +235,10 @@ public class MainDashboard extends JFrame {
 
             add(titlePanel, BorderLayout.NORTH);
 
-            // Statistics panel
             JPanel statsPanel = new JPanel(new GridLayout(2, 2, 20, 20));
             statsPanel.setBackground(BACKGROUND_COLOR);
             statsPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-            // Create stat cards
             JPanel totalCard = createStatCard("Total Tasks", "0", "", PRIMARY_COLOR);
             totalTasksLabel = (JLabel) ((JPanel) totalCard.getComponent(1)).getComponent(0);
 
@@ -282,7 +258,6 @@ public class MainDashboard extends JFrame {
 
             add(statsPanel, BorderLayout.CENTER);
 
-            // Quick actions panel
             JPanel actionsPanel = createQuickActionsPanel();
             add(actionsPanel, BorderLayout.SOUTH);
 
@@ -296,14 +271,12 @@ public class MainDashboard extends JFrame {
                     BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
                     BorderFactory.createEmptyBorder(20, 20, 20, 20)));
 
-            // Icon panel
             JPanel iconPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             iconPanel.setBackground(CARD_COLOR);
             JLabel iconLabel = new JLabel(icon);
             iconLabel.setFont(new Font("Segoe UI", Font.PLAIN, 40));
             iconPanel.add(iconLabel);
 
-            // Text panel
             JPanel textPanel = new JPanel();
             textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
             textPanel.setBackground(CARD_COLOR);

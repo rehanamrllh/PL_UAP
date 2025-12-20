@@ -5,10 +5,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-/**
- * Panel for displaying task history and statistics.
- * Shows completed tasks and provides analytics.
- */
 public class HistoryPanel extends JPanel {
     private TaskManager taskManager;
     private JTable historyTable;
@@ -37,7 +33,6 @@ public class HistoryPanel extends JPanel {
     }
 
     private void initComponents() {
-        // Title panel
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         titlePanel.setBackground(BACKGROUND_COLOR);
         JLabel titleLabel = new JLabel("Task History & Statistics");
@@ -47,15 +42,12 @@ public class HistoryPanel extends JPanel {
 
         add(titlePanel, BorderLayout.NORTH);
 
-        // Main content panel
         JPanel contentPanel = new JPanel(new BorderLayout(0, 20));
         contentPanel.setBackground(BACKGROUND_COLOR);
 
-        // Statistics panel at top
         JPanel statsPanel = createStatisticsPanel();
         contentPanel.add(statsPanel, BorderLayout.NORTH);
 
-        // History table in center
         JPanel tablePanel = createHistoryTablePanel();
         contentPanel.add(tablePanel, BorderLayout.CENTER);
 
@@ -69,19 +61,15 @@ public class HistoryPanel extends JPanel {
         panel.setBackground(BACKGROUND_COLOR);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-        // Total completed tasks
         JPanel completedCard = createStatCard("Total Completed", "0", "", ACCENT_COLOR);
         totalCompletedLabel = (JLabel) ((JPanel) completedCard.getComponent(1)).getComponent(0);
 
-        // Completion rate
         JPanel rateCard = createStatCard("Completion Rate", "0%", "", PRIMARY_COLOR);
         completionRateLabel = (JLabel) ((JPanel) rateCard.getComponent(1)).getComponent(0);
 
-        // High priority completed
         JPanel highPriorityCard = createStatCard("High Priority Done", "0", "", WARNING_COLOR);
         highPriorityLabel = (JLabel) ((JPanel) highPriorityCard.getComponent(1)).getComponent(0);
 
-        // Tasks per day average (simplified)
         JPanel avgCard = createStatCard("Active Tasks", "0", "", SECONDARY_COLOR);
         avgTasksLabel = (JLabel) ((JPanel) avgCard.getComponent(1)).getComponent(0);
 
@@ -100,14 +88,12 @@ public class HistoryPanel extends JPanel {
                 BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)));
 
-        // Icon panel
         JPanel iconPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         iconPanel.setBackground(CARD_COLOR);
         JLabel iconLabel = new JLabel(icon);
         iconLabel.setFont(new Font("Segoe UI", Font.PLAIN, 32));
         iconPanel.add(iconLabel);
 
-        // Text panel
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textPanel.setBackground(CARD_COLOR);
@@ -139,14 +125,12 @@ public class HistoryPanel extends JPanel {
                 BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)));
 
-        // Section title
         JLabel sectionTitle = new JLabel("Completed Tasks");
         sectionTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
         sectionTitle.setForeground(SECONDARY_COLOR);
         sectionTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         panel.add(sectionTitle, BorderLayout.NORTH);
 
-        // Create table
         String[] columnNames = { "ID", "Title", "Description", "Priority", "Created Date", "Completed Date" };
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -160,12 +144,11 @@ public class HistoryPanel extends JPanel {
         historyTable.setRowHeight(30);
         historyTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
         historyTable.getTableHeader().setBackground(ACCENT_COLOR);
-        historyTable.getTableHeader().setForeground(Color.WHITE);
+        historyTable.getTableHeader().setForeground(Color.BLACK);
         historyTable.setSelectionBackground(new Color(46, 204, 113, 100));
         historyTable.setSelectionForeground(SECONDARY_COLOR);
         historyTable.setGridColor(new Color(189, 195, 199));
 
-        // Set column widths
         historyTable.getColumnModel().getColumn(0).setPreferredWidth(50);
         historyTable.getColumnModel().getColumn(1).setPreferredWidth(200);
         historyTable.getColumnModel().getColumn(2).setPreferredWidth(250);
@@ -177,7 +160,6 @@ public class HistoryPanel extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Refresh button
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(CARD_COLOR);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
@@ -212,21 +194,17 @@ public class HistoryPanel extends JPanel {
 
     public void refreshHistory() {
         try {
-            // Update statistics
             TaskManager.TaskStatistics stats = taskManager.getStatistics();
             totalCompletedLabel.setText(String.valueOf(stats.completed));
             completionRateLabel.setText(String.format("%.1f%%", stats.getCompletionRate()));
 
-            // Get completed high priority tasks
             long completedHighPriority = taskManager.getCompletedTasks().stream()
                     .filter(t -> "HIGH".equals(t.getPriority()))
                     .count();
             highPriorityLabel.setText(String.valueOf(completedHighPriority));
 
-            // Active tasks (pending + in progress)
             avgTasksLabel.setText(String.valueOf(stats.pending + stats.inProgress));
 
-            // Update table with completed tasks
             tableModel.setRowCount(0);
             List<Task> completedTasks = taskManager.getCompletedTasks();
 
@@ -242,7 +220,6 @@ public class HistoryPanel extends JPanel {
                 tableModel.addRow(row);
             }
 
-            // Show message if no completed tasks
             if (completedTasks.isEmpty()) {
                 Object[] row = {
                         "",

@@ -1,2 +1,3 @@
-ID,Title,Description,Priority,Status,CreatedDate,CompletedDate
-1,Modul 6,APA KEK,MEDIUM,IN_PROGRESS,2025-12-20,
+ID,Title,Description,Priority,Status,CreatedDate,CompletedDate,DueDate
+2,A,a,MEDIUM,PENDING,2025-12-21,,2025-12-31
+3,C,c,MEDIUM,COMPLETED,2025-12-21,,2025-12-24

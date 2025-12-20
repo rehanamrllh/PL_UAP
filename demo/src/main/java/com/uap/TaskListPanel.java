@@ -7,9 +7,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
-/**
- * Panel for displaying tasks in a table with sorting and searching features.
- */
 public class TaskListPanel extends JPanel {
     private TaskManager taskManager;
     private MainDashboard parent;
@@ -39,11 +36,9 @@ public class TaskListPanel extends JPanel {
     }
 
     private void initComponents() {
-        // Title and filter panel
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(BACKGROUND_COLOR);
 
-        // Title
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         titlePanel.setBackground(BACKGROUND_COLOR);
         JLabel titleLabel = new JLabel(" Task List");
@@ -52,18 +47,14 @@ public class TaskListPanel extends JPanel {
         titlePanel.add(titleLabel);
 
         topPanel.add(titlePanel, BorderLayout.NORTH);
-
-        // Filter and search panel
         JPanel filterPanel = createFilterPanel();
         topPanel.add(filterPanel, BorderLayout.CENTER);
 
         add(topPanel, BorderLayout.NORTH);
 
-        // Table panel
         JPanel tablePanel = createTablePanel();
         add(tablePanel, BorderLayout.CENTER);
 
-        // Button panel
         JPanel buttonPanel = createButtonPanel();
         add(buttonPanel, BorderLayout.SOUTH);
 
@@ -75,7 +66,6 @@ public class TaskListPanel extends JPanel {
         panel.setBackground(BACKGROUND_COLOR);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-        // Search field
         JLabel searchLabel = new JLabel(" Search:");
         searchLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
         panel.add(searchLabel);
@@ -90,27 +80,24 @@ public class TaskListPanel extends JPanel {
         });
         panel.add(searchField);
 
-        // Status filter
         JLabel statusLabel = new JLabel("Status:");
         statusLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
         panel.add(statusLabel);
 
-        statusFilter = new JComboBox<>(new String[] { "ALL", "PENDING", "IN_PROGRESS", "COMPLETED" });
+        statusFilter = new JComboBox<>(new String[] { "ALL", "Pending", "In Progress", "Completed" });
         statusFilter.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         statusFilter.addActionListener(e -> filterTable());
         panel.add(statusFilter);
 
-        // Priority filter
         JLabel priorityLabel = new JLabel("Priority:");
         priorityLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
         panel.add(priorityLabel);
 
-        priorityFilter = new JComboBox<>(new String[] { "ALL", "HIGH", "MEDIUM", "LOW" });
+        priorityFilter = new JComboBox<>(new String[] { "ALL", "High", "Medium", "Low" });
         priorityFilter.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         priorityFilter.addActionListener(e -> filterTable());
         panel.add(priorityFilter);
 
-        // Clear filters button
         JButton clearButton = new JButton("Clear Filters");
         clearButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         clearButton.setBackground(SECONDARY_COLOR);
@@ -131,12 +118,11 @@ public class TaskListPanel extends JPanel {
                 BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)));
 
-        // Create table model
-        String[] columnNames = { "ID", "Title", "Description", "Priority", "Status", "Created Date" };
+        String[] columnNames = { "ID", "Title", "Description", "Priority", "Status", "Created Date", "Due Date" };
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Make table read-only
+                return false;
             }
         };
 
@@ -145,12 +131,11 @@ public class TaskListPanel extends JPanel {
         taskTable.setRowHeight(30);
         taskTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
         taskTable.getTableHeader().setBackground(PRIMARY_COLOR);
-        taskTable.getTableHeader().setForeground(Color.WHITE);
+        taskTable.getTableHeader().setForeground(Color.BLACK);
         taskTable.setSelectionBackground(new Color(52, 152, 219));
         taskTable.setSelectionForeground(Color.WHITE);
         taskTable.setGridColor(new Color(189, 195, 199));
 
-        // Set column widths
         taskTable.getColumnModel().getColumn(0).setPreferredWidth(50);
         taskTable.getColumnModel().getColumn(1).setPreferredWidth(200);
         taskTable.getColumnModel().getColumn(2).setPreferredWidth(300);
@@ -158,11 +143,9 @@ public class TaskListPanel extends JPanel {
         taskTable.getColumnModel().getColumn(4).setPreferredWidth(100);
         taskTable.getColumnModel().getColumn(5).setPreferredWidth(120);
 
-        // Add row sorter for sorting functionality
         sorter = new TableRowSorter<>(tableModel);
         taskTable.setRowSorter(sorter);
 
-        // Add double-click listener to edit task
         taskTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -233,26 +216,23 @@ public class TaskListPanel extends JPanel {
 
     public void refreshTable() {
         try {
-            // Clear existing rows
             tableModel.setRowCount(0);
 
-            // Get all tasks
             List<Task> tasks = taskManager.getAllTasks();
 
-            // Add tasks to table
             for (Task task : tasks) {
                 Object[] row = {
                         task.getId(),
                         task.getTitle(),
                         truncateText(task.getDescription(), 50),
-                        task.getPriority(),
-                        task.getStatus(),
-                        task.getFormattedCreatedDate()
+                        convertToUIFormat(task.getPriority()),
+                        convertToUIFormat(task.getStatus()),
+                        task.getFormattedCreatedDate(),
+                        task.getFormattedDueDate()
                 };
                 tableModel.addRow(row);
             }
 
-            // Apply current filters
             filterTable();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -270,15 +250,15 @@ public class TaskListPanel extends JPanel {
 
             List<Task> tasks = taskManager.getAllTasks();
 
-            // Apply filters
             if (!"ALL".equals(selectedStatus)) {
-                tasks = taskManager.getTasksByStatus(selectedStatus);
+                String backendStatus = convertToBackendFormat(selectedStatus);
+                tasks = taskManager.getTasksByStatus(backendStatus);
             }
 
             if (!"ALL".equals(selectedPriority)) {
-                String finalSelectedPriority = selectedPriority;
+                String backendPriority = convertToBackendFormat(selectedPriority);
                 tasks = tasks.stream()
-                        .filter(t -> t.getPriority().equals(finalSelectedPriority))
+                        .filter(t -> t.getPriority().equals(backendPriority))
                         .collect(java.util.stream.Collectors.toList());
             }
 
@@ -290,16 +270,16 @@ public class TaskListPanel extends JPanel {
                         .collect(java.util.stream.Collectors.toList());
             }
 
-            // Update table
             tableModel.setRowCount(0);
             for (Task task : tasks) {
                 Object[] row = {
                         task.getId(),
                         task.getTitle(),
                         truncateText(task.getDescription(), 50),
-                        task.getPriority(),
-                        task.getStatus(),
-                        task.getFormattedCreatedDate()
+                        convertToUIFormat(task.getPriority()),
+                        convertToUIFormat(task.getStatus()),
+                        task.getFormattedCreatedDate(),
+                        task.getFormattedDueDate()
                 };
                 tableModel.addRow(row);
             }
@@ -397,5 +377,60 @@ public class TaskListPanel extends JPanel {
             return text;
         }
         return text.substring(0, maxLength) + "...";
+    }
+
+    // Helper method to convert UI format to backend format
+    private String convertToBackendFormat(String uiValue) {
+        if (uiValue == null)
+            return null;
+        switch (uiValue) {
+            case "High":
+                return "HIGH";
+            case "Medium":
+                return "MEDIUM";
+            case "Low":
+                return "LOW";
+            case "Pending":
+                return "PENDING";
+            case "In Progress":
+                return "IN_PROGRESS";
+            case "Completed":
+                return "COMPLETED";
+            default:
+                return uiValue.toUpperCase().replace(" ", "_");
+        }
+    }
+
+    // Helper method to convert backend format to UI format
+    private String convertToUIFormat(String backendValue) {
+        if (backendValue == null)
+            return null;
+        switch (backendValue) {
+            case "HIGH":
+                return "High";
+            case "MEDIUM":
+                return "Medium";
+            case "LOW":
+                return "Low";
+            case "PENDING":
+                return "Pending";
+            case "IN_PROGRESS":
+                return "In Progress";
+            case "COMPLETED":
+                return "Completed";
+            default: {
+                // Convert SOME_TEXT to Some Text
+                String[] words = backendValue.toLowerCase().split("_");
+                StringBuilder result = new StringBuilder();
+                for (String word : words) {
+                    if (result.length() > 0)
+                        result.append(" ");
+                    result.append(Character.toUpperCase(word.charAt(0)));
+                    if (word.length() > 1)
+                        result.append(word.substring(1));
+                }
+                return result.toString();
+            }
+        }
     }
 }

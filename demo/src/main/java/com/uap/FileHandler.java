@@ -4,24 +4,15 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Handles file operations for data persistence.
- * Implements exception handling for robust file operations.
- */
 public class FileHandler {
     private static final String DATA_FILE = "tasks.csv";
-    private static final String HEADER = "ID,Title,Description,Priority,Status,CreatedDate,CompletedDate";
+    private static final String HEADER = "ID,Title,Description,Priority,Status,CreatedDate,CompletedDate,DueDate";
 
-    /**
-     * Save tasks to CSV file
-     */
     public static void saveTasks(List<Task> tasks) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_FILE))) {
-            // Write header
             writer.write(HEADER);
             writer.newLine();
 
-            // Write each task
             for (Task task : tasks) {
                 writer.write(task.toCSV());
                 writer.newLine();
@@ -34,14 +25,10 @@ public class FileHandler {
         }
     }
 
-    /**
-     * Load tasks from CSV file
-     */
     public static List<Task> loadTasks() {
         List<Task> tasks = new ArrayList<>();
         File file = new File(DATA_FILE);
 
-        // If file doesn't exist, return empty list
         if (!file.exists()) {
             System.out.println("No existing data file found. Starting with empty task list.");
             return tasks;
@@ -55,13 +42,11 @@ public class FileHandler {
             while ((line = reader.readLine()) != null) {
                 lineNumber++;
 
-                // Skip header
                 if (isHeader) {
                     isHeader = false;
                     continue;
                 }
 
-                // Skip empty lines
                 if (line.trim().isEmpty()) {
                     continue;
                 }
@@ -72,8 +57,7 @@ public class FileHandler {
                         tasks.add(task);
                     }
                 } catch (Exception e) {
-                    System.err.println("Error parsing line " + lineNumber + ": " + e.getMessage());
-                    // Continue loading other tasks even if one fails
+                    System.err.println("Error parsing line " + lineNumber + " : " + e.getMessage());
                 }
             }
 
@@ -87,14 +71,12 @@ public class FileHandler {
         return tasks;
     }
 
-    /**
-     * Parse a Task object from CSV line
-     */
     private static Task parseTaskFromCSV(String csvLine) throws Exception {
         List<String> values = parseCsvLine(csvLine);
 
+    
         if (values.size() < 7) {
-            throw new Exception("Invalid CSV format: Expected 7 fields, got " + values.size());
+            throw new Exception("Invalid CSV format: Expected at least 7 fields, got " + values.size());
         }
 
         try {
@@ -105,21 +87,18 @@ public class FileHandler {
             String status = values.get(4).trim();
             String createdDate = values.get(5).trim();
             String completedDate = values.get(6).trim();
+            String dueDate = values.size() > 7 ? values.get(7).trim() : "";
 
-            // Validate required fields
             if (title.isEmpty()) {
                 throw new Exception("Task title cannot be empty");
             }
 
-            return new Task(id, title, description, priority, status, createdDate, completedDate);
+            return new Task(id, title, description, priority, status, createdDate, completedDate, dueDate);
         } catch (NumberFormatException e) {
             throw new Exception("Invalid ID format: " + e.getMessage());
         }
     }
 
-    /**
-     * Parse CSV line handling quoted fields
-     */
     private static List<String> parseCsvLine(String line) {
         List<String> values = new ArrayList<>();
         StringBuilder currentValue = new StringBuilder();
@@ -129,10 +108,9 @@ public class FileHandler {
             char c = line.charAt(i);
 
             if (c == '"') {
-                // Handle double quotes (escaped quotes)
                 if (inQuotes && i + 1 < line.length() && line.charAt(i + 1) == '"') {
                     currentValue.append('"');
-                    i++; // Skip next quote
+                    i++;
                 } else {
                     inQuotes = !inQuotes;
                 }
@@ -144,15 +122,11 @@ public class FileHandler {
             }
         }
 
-        // Add last value
         values.add(currentValue.toString());
 
         return values;
     }
 
-    /**
-     * Create backup of current data file
-     */
     public static void createBackup() {
         File sourceFile = new File(DATA_FILE);
         if (!sourceFile.exists()) {
@@ -177,16 +151,10 @@ public class FileHandler {
         }
     }
 
-    /**
-     * Check if data file exists
-     */
     public static boolean dataFileExists() {
         return new File(DATA_FILE).exists();
     }
 
-    /**
-     * Get data file path
-     */
     public static String getDataFilePath() {
         return new File(DATA_FILE).getAbsolutePath();
     }
