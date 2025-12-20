@@ -1,8 +1,28 @@
 package com.uap;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 /**
  * Main Dashboard with navigation menu.
@@ -183,8 +203,11 @@ public class MainDashboard extends JFrame {
     }
 
     public void showEditPanel(Task task) {
+        // Load task into the input form and show the input panel
+        // Use cardLayout.show directly to avoid showPanel("TASK_INPUT") calling
+        // clearForm() which would reset the editing state.
         taskInputPanel.loadTaskForEdit(task);
-        showPanel("TASK_INPUT");
+        cardLayout.show(contentPanel, "TASK_INPUT");
     }
 
     private void saveDataBeforeExit() {
