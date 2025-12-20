@@ -19,7 +19,7 @@
 
 ## 📸 Preview
 
-![Dashboard Preview](demo/screenshots/dashboard.png)
+![Dashboard Preview](demo/screenshots/dashbord.png)
 *Dashboard with real-time statistics and quick actions.*
 
 ![Task List Preview](demo/screenshots/task_list.png)
