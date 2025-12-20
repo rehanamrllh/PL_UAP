@@ -83,24 +83,6 @@ mvn package
 
 ---
 
-## 📚 Documentation
-
-This project comes with comprehensive documentation:
-
-### 🎯 Start Here
-- **[INDEX.md](demo/INDEX.md)** - Navigation guide for the documentation
-- **[QUICK_START.md](demo/QUICK_START.md)** - How to run the application
-
-### 📖 Main Documentation
-- **[README_APP.md](demo/README_APP.md)** - Complete technical documentation
-- **[USER_GUIDE.md](demo/USER_GUIDE.md)** - User manual (in Bahasa Indonesia)
-
-### ✅ UAP Requirements
-- **[DOKUMENTASI_KETENTUAN.md](demo/DOKUMENTASI_KETENTUAN.md)** - Compliance with UAP requirements
-- **[PROJECT_SUMMARY.md](demo/PROJECT_SUMMARY.md)** - Project summary
-
----
-
 ## 🎯 Main Features
 
 ### 1️⃣ Dashboard
