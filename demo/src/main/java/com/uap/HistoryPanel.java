@@ -131,7 +131,7 @@ public class HistoryPanel extends JPanel {
         sectionTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         panel.add(sectionTitle, BorderLayout.NORTH);
 
-        String[] columnNames = { "ID", "Title", "Description", "Priority", "Created Date", "Completed Date" };
+        String[] columnNames = { "ID", "Title", "Description", "Priority", "Created Date", "Due Date" };
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -213,9 +213,9 @@ public class HistoryPanel extends JPanel {
                         task.getId(),
                         task.getTitle(),
                         truncateText(task.getDescription(), 40),
-                        task.getPriority(),
+                        convertToUIFormat(task.getPriority()),
                         task.getFormattedCreatedDate(),
-                        task.getFormattedCompletedDate()
+                        task.getFormattedDueDate()
                 };
                 tableModel.addRow(row);
             }
@@ -245,5 +245,38 @@ public class HistoryPanel extends JPanel {
             return text;
         }
         return text.substring(0, maxLength) + "...";
+    }
+
+    // Helper method to convert backend format to UI format
+    private String convertToUIFormat(String backendValue) {
+        if (backendValue == null)
+            return null;
+        switch (backendValue) {
+            case "HIGH":
+                return "High";
+            case "MEDIUM":
+                return "Medium";
+            case "LOW":
+                return "Low";
+            case "PENDING":
+                return "Pending";
+            case "IN_PROGRESS":
+                return "In Progress";
+            case "COMPLETED":
+                return "Completed";
+            default: {
+                // Convert SOME_TEXT to Some Text
+                String[] words = backendValue.toLowerCase().split("_");
+                StringBuilder result = new StringBuilder();
+                for (String word : words) {
+                    if (result.length() > 0)
+                        result.append(" ");
+                    result.append(Character.toUpperCase(word.charAt(0)));
+                    if (word.length() > 1)
+                        result.append(word.substring(1));
+                }
+                return result.toString();
+            }
+        }
     }
 }
