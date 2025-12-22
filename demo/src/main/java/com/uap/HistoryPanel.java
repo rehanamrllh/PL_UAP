@@ -143,10 +143,10 @@ public class HistoryPanel extends JPanel {
         historyTable.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         historyTable.setRowHeight(30);
         historyTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-        historyTable.getTableHeader().setBackground(ACCENT_COLOR);
+        historyTable.getTableHeader().setBackground(PRIMARY_COLOR);
         historyTable.getTableHeader().setForeground(Color.BLACK);
         historyTable.setSelectionBackground(new Color(46, 204, 113, 100));
-        historyTable.setSelectionForeground(SECONDARY_COLOR);
+        historyTable.setSelectionForeground(Color.WHITE);
         historyTable.setGridColor(new Color(189, 195, 199));
 
         historyTable.getColumnModel().getColumn(0).setPreferredWidth(50);
