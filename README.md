@@ -19,10 +19,10 @@
 ## 📸 Preview
 
 ![Dashboard Preview](demo/screenshots/dashboard.png)
-*Dashboard with real-time statistics and quick actions.*
+>Dashboard with real-time statistics and quick actions.
 
 ![Task List Preview](demo/screenshots/task_list.png)
-*Interactive task list with sorting and filtering.*
+>Interactive task list with sorting and filtering.
 
 ![Add Task Preview](demo/screenshots/add_tasks.png)
 >User-friendly form for adding and editing tasks.
