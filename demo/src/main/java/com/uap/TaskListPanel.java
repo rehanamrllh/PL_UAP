@@ -2,7 +2,6 @@ package com.uap;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -15,7 +14,6 @@ public class TaskListPanel extends JPanel {
     private JTextField searchField;
     private JComboBox<String> statusFilter;
     private JComboBox<String> priorityFilter;
-    private TableRowSorter<DefaultTableModel> sorter;
 
     private static final Color PRIMARY_COLOR = new Color(41, 128, 185);
     private static final Color SECONDARY_COLOR = new Color(52, 73, 94);
@@ -143,8 +141,7 @@ public class TaskListPanel extends JPanel {
         taskTable.getColumnModel().getColumn(4).setPreferredWidth(100);
         taskTable.getColumnModel().getColumn(5).setPreferredWidth(120);
 
-        sorter = new TableRowSorter<>(tableModel);
-        taskTable.setRowSorter(sorter);
+        taskTable.setRowSorter(new javax.swing.table.TableRowSorter<>(tableModel));
 
         taskTable.addMouseListener(new MouseAdapter() {
             @Override

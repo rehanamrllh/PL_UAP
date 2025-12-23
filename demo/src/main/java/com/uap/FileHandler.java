@@ -74,7 +74,6 @@ public class FileHandler {
     private static Task parseTaskFromCSV(String csvLine) throws Exception {
         List<String> values = parseCsvLine(csvLine);
 
-    
         if (values.size() < 7) {
             throw new Exception("Invalid CSV format: Expected at least 7 fields, got " + values.size());
         }
@@ -125,34 +124,6 @@ public class FileHandler {
         values.add(currentValue.toString());
 
         return values;
-    }
-
-    public static void createBackup() {
-        File sourceFile = new File(DATA_FILE);
-        if (!sourceFile.exists()) {
-            return;
-        }
-
-        String backupFileName = "tasks_backup_" + System.currentTimeMillis() + ".csv";
-        File backupFile = new File(backupFileName);
-
-        try (InputStream in = new FileInputStream(sourceFile);
-                OutputStream out = new FileOutputStream(backupFile)) {
-
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = in.read(buffer)) > 0) {
-                out.write(buffer, 0, length);
-            }
-
-            System.out.println("Backup created: " + backupFileName);
-        } catch (IOException e) {
-            System.err.println("Error creating backup: " + e.getMessage());
-        }
-    }
-
-    public static boolean dataFileExists() {
-        return new File(DATA_FILE).exists();
     }
 
     public static String getDataFilePath() {
