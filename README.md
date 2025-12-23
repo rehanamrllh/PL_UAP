@@ -11,7 +11,7 @@
 
 **UAP Pemrograman Lanjut 2025** | Universitas Muhammadiyah Malang
 
-[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Documentation](#-documentation)
+[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Project Structure](#-project-structure) • [Support](#-support)
 
 </div>
 
@@ -25,7 +25,7 @@
 ![Task List Preview](demo/screenshots/task_list.png)
 *Interactive task list with sorting and filtering.*
 
-![Add Task Preview](demo/screenshots/add_task.png)
+![Add Task Preview](demo/screenshots/add_tasks.png)
 >User-friendly form for adding and editing tasks.
 
 ![History & Stats Preview](demo/screenshots/history_stats.png)
@@ -40,6 +40,9 @@
 - **Real-time Search** and filtering
 - **Statistics Dashboard** with visualizations
 - **Complete CRUD** functionality
+- **Auto-increment numeric ID** (1,2,3,...) for tasks
+- **LocalDate handling** (created date + due date)
+- **Simple Date Picker** (spinner-based)
 - **Comprehensive Error Handling**
 
 ---
@@ -61,8 +64,13 @@ cd demo
 # Compile the project
 mvn clean compile
 
-# Run the application
-mvn exec:java -Dexec.mainClass="com.uap.ToDoListApp"
+# Run the application (recommended)
+mvn -DskipTests package
+java -jar target/demo-1.0-SNAPSHOT.jar
+
+# Alternative (VS Code / direct run)
+# Main class: com.uap.app.ToDoApp
+# Compatibility launcher: com.uap.ToDoApp
 
 # (Optional) Package the application
 mvn package
@@ -75,11 +83,12 @@ mvn package
 1. **Run the application** using one of the methods above.
 2. **Add a new task** via the "Add Task" menu.
 3. **View all tasks** in the "Task List" section.
-4. **Edit a task** by double-clicking it or using the Edit button.
+4. **Edit a task** using the Edit button.
 5. **Delete a task** using the Delete button.
 6. **View history** in the "History" menu.
 
-**For detailed instructions:** Refer to the [USER_GUIDE.md](demo/USER_GUIDE.md)
+Data is stored in a CSV file named `tasks_data.csv` in the current working directory.
+If you want to reset the app data, delete that file.
 
 ---
 
@@ -93,8 +102,8 @@ mvn package
 ### 2️⃣ Task List
 - Interactive table with sorting
 - Real-time search
-- Multi-filter (Status + Priority)
-- Double-click to edit
+- Filter by status (ALL / Pending / Completed)
+- Edit/Delete/Complete actions via buttons
 
 ### 3️⃣ Add/Edit Task
 - Input form with validation
@@ -112,7 +121,7 @@ mvn package
 
 ## 💻 Technologies Used
 
-- **Java 21** (compatible with 11+)
+- **Java** (tested with JDK 21; source/target configured by Maven)
 - **Java Swing** for GUI
 - **Maven** for build management
 - **CSV** for data storage
@@ -126,23 +135,23 @@ mvn package
 ```
 demo/
 ├── src/main/java/com/uap/
-│   ├── ToDoListApp.java       # Main entry point
-│   ├── MainDashboard.java     # Dashboard & Navigation
-│   ├── TaskListPanel.java     # Task list view
-│   ├── TaskInputPanel.java    # Add/Edit form
-│   ├── HistoryPanel.java      # History & stats
-│   ├── Task.java              # Model class
-│   ├── TaskManager.java       # Business logic
-│   └── FileHandler.java       # File operations
-│
-├── Documentation/
-│   ├── INDEX.md               # 📚 Navigation guide
-│   ├── QUICK_START.md         # 🚀 Installation
-│   ├── README_APP.md          # 📖 Full docs
-│   ├── USER_GUIDE.md          # 📱 User manual
-│   ├── DOKUMENTASI_KETENTUAN.md # ✅ Requirements
-│   └── PROJECT_SUMMARY.md     # 📊 Summary
-│
+│   └── ToDoApp.java                 # Compatibility launcher (calls com.uap.app.ToDoApp)
+├── src/main/java/com/uap/app/
+│   └── ToDoApp.java                 # Main entry point (JFrame + navigation)
+├── src/main/java/com/uap/data/
+│   └── DataManager.java             # CSV load/save + ID generation
+├── src/main/java/com/uap/model/
+│   └── Task.java                    # Model (LocalDate created/due)
+├── src/main/java/com/uap/ui/
+│   ├── LocalDatePickerField.java    # Simplified date picker (spinner)
+│   ├── UIColors.java                # Theme colors
+│   └── UIUtils.java                 # UI helpers
+└── src/main/java/com/uap/ui/panels/
+	├── DashboardPanel.java
+	├── TaskListPanel.java
+	├── AddTaskPanel.java
+	└── HistoryPanel.java
+
 └── pom.xml                    # Maven config
 ```
 
@@ -206,8 +215,9 @@ cd demo
 # Compile
 mvn clean compile
 
-# Run
-mvn exec:java -Dexec.mainClass="com.uap.ToDoListApp"
+# Run (jar)
+mvn -DskipTests package
+java -jar target/demo-1.0-SNAPSHOT.jar
 
 # Package (optional)
 mvn package
@@ -244,7 +254,6 @@ Proyek ini mengimplementasikan konsep dari **Modul 1-6**:
 
 ### Advanced Features
 - ✅ Real-time search
-- ✅ Multi-filter
 - ✅ Table sorting
 - ✅ Statistics dashboard
 - ✅ Completion tracking
@@ -253,11 +262,8 @@ Proyek ini mengimplementasikan konsep dari **Modul 1-6**:
 
 ## 📞 Support
 
-**Dokumentasi Lengkap:** [demo/INDEX.md](demo/INDEX.md)
-
-**Quick Start:** [demo/QUICK_START.md](demo/QUICK_START.md)
-
-**User Guide:** [demo/USER_GUIDE.md](demo/USER_GUIDE.md)
+- Source code: `demo/src/main/java`
+- Screenshots: `demo/screenshots/`
 
 ---
 

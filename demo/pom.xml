@@ -60,7 +60,7 @@
           <configuration>
             <archive>
               <manifest>
-                <mainClass>com.uap.App</mainClass>
+                <mainClass>com.uap.app.ToDoApp</mainClass>
               </manifest>
             </archive>
           </configuration>
