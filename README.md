@@ -7,11 +7,10 @@
 ![Java](https://img.shields.io/badge/Java-11+-orange.svg)
 ![Maven](https://img.shields.io/badge/Maven-3.6+-blue.svg)
 ![License](https://img.shields.io/badge/License-Academic-green.svg)
-![Status](https://img.shields.io/badge/Status-Complete-success.svg)
 
 **UAP Pemrograman Lanjut 2025** | Universitas Muhammadiyah Malang
 
-[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Project Structure](#-project-structure) • [Support](#-support)
+[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Project Structure](#-project-structure)
 
 </div>
 
@@ -157,27 +156,6 @@ demo/
 
 ---
 
-## ✅ Compliance with UAP Requirements
-
-| Requirement | Status | Implementation |
-|-------------|--------|----------------|
-| **A. Java Swing GUI** | ✅ | 100% Swing components used |
-| **B. 4+ Pages** | ✅ | Dashboard, List, Input, History |
-| **C. Complete CRUD** | ✅ | Create, Read, Update, Delete operations |
-| **D. File Handling** | ✅ | CSV format with auto-save feature |
-| **E. Sorting** | ✅ | Multi-column sorting in tables |
-| **F. Searching** | ✅ | Real-time search and filtering |
-| **G. LocalDate Usage** | ✅ | Proper date tracking implemented |
-| **H. ArrayList Usage** | ✅ | Dynamic data storage with ArrayList |
-| **I. Comparator Usage** | ✅ | Custom sorting implemented with Comparator |
-| **J. Exception Handling** | ✅ | Comprehensive try-catch blocks for error handling |
-
-**Overall Compliance: 100% ✅**
-
----
-
-## 🎨 Screenshots
-
 ### Dashboard
 - Modern interface with statistics cards
 - Color-coded information for quick insights
@@ -236,34 +214,6 @@ Proyek ini mengimplementasikan konsep dari **Modul 1-6**:
 5. **GUI Development** - Swing components, event handling
 6. **Design Patterns** - MVC, Observer, Strategy
 
----
-
-## 🏆 Key Features Breakdown
-
-### Data Management
-- ✅ Auto-increment ID
-- ✅ Input validation
-- ✅ Data persistence
-- ✅ Error recovery
-
-### User Interface
-- ✅ Modern design
-- ✅ Intuitive navigation
-- ✅ Visual feedback
-- ✅ Responsive layout
-
-### Advanced Features
-- ✅ Real-time search
-- ✅ Table sorting
-- ✅ Statistics dashboard
-- ✅ Completion tracking
-
----
-
-## 📞 Support
-
-- Source code: `demo/src/main/java`
-- Screenshots: `demo/screenshots/`
 
 ---
 
@@ -273,20 +223,7 @@ Project ini dibuat untuk keperluan akademik (UAP Pemrograman Lanjut 2025).
 
 ---
 
-## 🎉 Status Proyek
 
-**Status: COMPLETE ✅**
-
-✅ All source files created
-✅ CRUD operations working
-✅ GUI implemented
-✅ File handling functional
-✅ Exception handling added
-✅ Documentation complete
-✅ Testing performed
-✅ Ready for submission
-
----
 
 **🚀 Ready to use! Happy Task Managing!**
 
