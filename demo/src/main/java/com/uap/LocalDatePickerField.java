@@ -44,8 +44,8 @@ public class LocalDatePickerField extends JPanel {
 
         // Keep styling consistent if UIColors exists.
         try {
-            pickerButton.setBackground(UIColors.BTN_BLUE);
-            pickerButton.setForeground(Color.WHITE);
+            pickerButton.setBackground(Color.WHITE);
+            pickerButton.setForeground(Color.BLACK);
         } catch (Throwable ignored) {
             // no-op
         }
