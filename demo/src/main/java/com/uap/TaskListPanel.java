@@ -221,9 +221,9 @@ public class TaskListPanel extends JPanel {
                 Object[] row = {
                         task.getId(),
                         task.getTitle(),
-                        truncateText(task.getDescription(), 50),
-                        convertToUIFormat(task.getPriority()),
-                        convertToUIFormat(task.getStatus()),
+                        UiFormat.truncate(task.getDescription(), 50),
+                        UiFormat.toUi(task.getPriority()),
+                        UiFormat.toUi(task.getStatus()),
                         task.getFormattedCreatedDate(),
                         task.getFormattedDueDate()
                 };
@@ -248,12 +248,12 @@ public class TaskListPanel extends JPanel {
             List<Task> tasks = taskManager.getAllTasks();
 
             if (!"ALL".equals(selectedStatus)) {
-                String backendStatus = convertToBackendFormat(selectedStatus);
+                String backendStatus = UiFormat.toBackend(selectedStatus);
                 tasks = taskManager.getTasksByStatus(backendStatus);
             }
 
             if (!"ALL".equals(selectedPriority)) {
-                String backendPriority = convertToBackendFormat(selectedPriority);
+                String backendPriority = UiFormat.toBackend(selectedPriority);
                 tasks = tasks.stream()
                         .filter(t -> t.getPriority().equals(backendPriority))
                         .collect(java.util.stream.Collectors.toList());
@@ -272,9 +272,9 @@ public class TaskListPanel extends JPanel {
                 Object[] row = {
                         task.getId(),
                         task.getTitle(),
-                        truncateText(task.getDescription(), 50),
-                        convertToUIFormat(task.getPriority()),
-                        convertToUIFormat(task.getStatus()),
+                        UiFormat.truncate(task.getDescription(), 50),
+                        UiFormat.toUi(task.getPriority()),
+                        UiFormat.toUi(task.getStatus()),
                         task.getFormattedCreatedDate(),
                         task.getFormattedDueDate()
                 };
@@ -369,65 +369,4 @@ public class TaskListPanel extends JPanel {
         }
     }
 
-    private String truncateText(String text, int maxLength) {
-        if (text == null || text.length() <= maxLength) {
-            return text;
-        }
-        return text.substring(0, maxLength) + "...";
-    }
-
-    // Helper method to convert UI format to backend format
-    private String convertToBackendFormat(String uiValue) {
-        if (uiValue == null)
-            return null;
-        switch (uiValue) {
-            case "High":
-                return "HIGH";
-            case "Medium":
-                return "MEDIUM";
-            case "Low":
-                return "LOW";
-            case "Pending":
-                return "PENDING";
-            case "In Progress":
-                return "IN_PROGRESS";
-            case "Completed":
-                return "COMPLETED";
-            default:
-                return uiValue.toUpperCase().replace(" ", "_");
-        }
-    }
-
-    // Helper method to convert backend format to UI format
-    private String convertToUIFormat(String backendValue) {
-        if (backendValue == null)
-            return null;
-        switch (backendValue) {
-            case "HIGH":
-                return "High";
-            case "MEDIUM":
-                return "Medium";
-            case "LOW":
-                return "Low";
-            case "PENDING":
-                return "Pending";
-            case "IN_PROGRESS":
-                return "In Progress";
-            case "COMPLETED":
-                return "Completed";
-            default: {
-                // Convert SOME_TEXT to Some Text
-                String[] words = backendValue.toLowerCase().split("_");
-                StringBuilder result = new StringBuilder();
-                for (String word : words) {
-                    if (result.length() > 0)
-                        result.append(" ");
-                    result.append(Character.toUpperCase(word.charAt(0)));
-                    if (word.length() > 1)
-                        result.append(word.substring(1));
-                }
-                return result.toString();
-            }
-        }
-    }
 }

@@ -301,15 +301,15 @@ public class TaskInputPanel extends JPanel {
             boolean success;
             if (editingTask == null) {
                 Task newTask = taskManager.addTask(title, description,
-                        convertToBackendFormat(priority),
-                        convertToBackendFormat(status),
+                        UiFormat.toBackend(priority),
+                        UiFormat.toBackend(status),
                         dueDate);
                 success = (newTask != null);
             } else {
                 success = taskManager.updateTask(editingTask.getId(),
                         title, description,
-                        convertToBackendFormat(priority),
-                        convertToBackendFormat(status),
+                        UiFormat.toBackend(priority),
+                        UiFormat.toBackend(status),
                         dueDate);
             }
 
@@ -368,7 +368,7 @@ public class TaskInputPanel extends JPanel {
         descriptionArea.setText(task.getDescription());
 
         String priority = task.getPriority();
-        String priorityUI = convertToUIFormat(priority);
+        String priorityUI = UiFormat.toUi(priority);
         for (int i = 0; i < priorityCombo.getItemCount(); i++) {
             if (priorityCombo.getItemAt(i).equals(priorityUI)) {
                 priorityCombo.setSelectedIndex(i);
@@ -377,7 +377,7 @@ public class TaskInputPanel extends JPanel {
         }
 
         String status = task.getStatus();
-        String statusUI = convertToUIFormat(status);
+        String statusUI = UiFormat.toUi(status);
         for (int i = 0; i < statusCombo.getItemCount(); i++) {
             if (statusCombo.getItemAt(i).equals(statusUI)) {
                 statusCombo.setSelectedIndex(i);
@@ -560,58 +560,4 @@ public class TaskInputPanel extends JPanel {
         dialog.setVisible(true);
     }
 
-    // Helper method to convert UI format to backend format
-    private String convertToBackendFormat(String uiValue) {
-        if (uiValue == null)
-            return null;
-        switch (uiValue) {
-            case "High":
-                return "HIGH";
-            case "Medium":
-                return "MEDIUM";
-            case "Low":
-                return "LOW";
-            case "Pending":
-                return "PENDING";
-            case "In Progress":
-                return "IN_PROGRESS";
-            case "Completed":
-                return "COMPLETED";
-            default:
-                return uiValue.toUpperCase().replace(" ", "_");
-        }
-    }
-
-    // Helper method to convert backend format to UI format
-    private String convertToUIFormat(String backendValue) {
-        if (backendValue == null)
-            return null;
-        switch (backendValue) {
-            case "HIGH":
-                return "High";
-            case "MEDIUM":
-                return "Medium";
-            case "LOW":
-                return "Low";
-            case "PENDING":
-                return "Pending";
-            case "IN_PROGRESS":
-                return "In Progress";
-            case "COMPLETED":
-                return "Completed";
-            default: {
-                // Convert SOME_TEXT to Some Text
-                String[] words = backendValue.toLowerCase().split("_");
-                StringBuilder result = new StringBuilder();
-                for (String word : words) {
-                    if (result.length() > 0)
-                        result.append(" ");
-                    result.append(Character.toUpperCase(word.charAt(0)));
-                    if (word.length() > 1)
-                        result.append(word.substring(1));
-                }
-                return result.toString();
-            }
-        }
-    }
 }

@@ -130,18 +130,6 @@ public class TaskManager {
         }
     }
 
-    public List<Task> searchTasks(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) {
-            return getAllTasks();
-        }
-
-        String searchTerm = keyword.toLowerCase().trim();
-        return tasks.stream()
-                .filter(t -> t.getTitle().toLowerCase().contains(searchTerm) ||
-                        t.getDescription().toLowerCase().contains(searchTerm))
-                .collect(Collectors.toList());
-    }
-
     public List<Task> getTasksByStatus(String status) {
         if (status == null || status.trim().isEmpty() || "ALL".equalsIgnoreCase(status)) {
             return getAllTasks();
@@ -152,74 +140,12 @@ public class TaskManager {
                 .collect(Collectors.toList());
     }
 
-    public List<Task> getTasksByPriority(String priority) {
-        if (priority == null || priority.trim().isEmpty() || "ALL".equalsIgnoreCase(priority)) {
-            return getAllTasks();
-        }
-
-        return tasks.stream()
-                .filter(t -> t.getPriority().equalsIgnoreCase(priority))
-                .collect(Collectors.toList());
-    }
-
     public List<Task> getCompletedTasks() {
         return tasks.stream()
                 .filter(t -> "COMPLETED".equals(t.getStatus()))
                 .sorted(Comparator.comparing(Task::getCompletedDate,
                         Comparator.nullsLast(Comparator.reverseOrder())))
                 .collect(Collectors.toList());
-    }
-
-    public List<Task> getPendingTasks() {
-        return tasks.stream()
-                .filter(t -> !"COMPLETED".equals(t.getStatus()))
-                .collect(Collectors.toList());
-    }
-
-    public List<Task> sortTasks(List<Task> taskList, String sortBy, boolean ascending) {
-        List<Task> sortedList = new ArrayList<>(taskList);
-
-        Comparator<Task> comparator;
-        switch (sortBy.toUpperCase()) {
-            case "TITLE":
-                comparator = Comparator.comparing(Task::getTitle);
-                break;
-            case "PRIORITY":
-                comparator = Comparator.comparingInt(t -> getPriorityValue(t.getPriority()));
-                break;
-            case "STATUS":
-                comparator = Comparator.comparing(Task::getStatus);
-                break;
-            case "CREATED":
-                comparator = Comparator.comparing(Task::getCreatedDate);
-                break;
-            case "COMPLETED":
-                comparator = Comparator.comparing(Task::getCompletedDate,
-                        Comparator.nullsLast(Comparator.naturalOrder()));
-                break;
-            default:
-                comparator = Comparator.comparingInt(Task::getId);
-        }
-
-        if (!ascending) {
-            comparator = comparator.reversed();
-        }
-
-        sortedList.sort(comparator);
-        return sortedList;
-    }
-
-    private int getPriorityValue(String priority) {
-        switch (priority) {
-            case "HIGH":
-                return 1;
-            case "MEDIUM":
-                return 2;
-            case "LOW":
-                return 3;
-            default:
-                return 4;
-        }
     }
 
     public TaskStatistics getStatistics() {

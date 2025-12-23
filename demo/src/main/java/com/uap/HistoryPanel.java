@@ -15,11 +15,11 @@ public class HistoryPanel extends JPanel {
     private JLabel highPriorityLabel;
     private JLabel avgTasksLabel;
 
-    private static final Color PRIMARY_COLOR = new Color(41, 128, 185);
-    private static final Color SECONDARY_COLOR = new Color(52, 73, 94);
-    private static final Color ACCENT_COLOR = new Color(46, 204, 113);
-    private static final Color WARNING_COLOR = new Color(243, 156, 18);
-    private static final Color BACKGROUND_COLOR = new Color(236, 240, 241);
+    private static final Color PRIMARY_COLOR = new Color(41, 128, 185); // Blue
+    private static final Color SECONDARY_COLOR = new Color(52, 73, 94); // Dark Gray
+    private static final Color ACCENT_COLOR = new Color(46, 204, 113); // Green
+    private static final Color WARNING_COLOR = new Color(243, 156, 18); // Orange
+    private static final Color BACKGROUND_COLOR = new Color(236, 240, 241); // Light Gray
     private static final Color CARD_COLOR = Color.WHITE;
 
     public HistoryPanel(TaskManager taskManager) {
@@ -212,8 +212,8 @@ public class HistoryPanel extends JPanel {
                 Object[] row = {
                         task.getId(),
                         task.getTitle(),
-                        truncateText(task.getDescription(), 40),
-                        convertToUIFormat(task.getPriority()),
+                        UiFormat.truncate(task.getDescription(), 40),
+                        UiFormat.toUi(task.getPriority()),
                         task.getFormattedCreatedDate(),
                         task.getFormattedDueDate()
                 };
@@ -237,46 +237,6 @@ public class HistoryPanel extends JPanel {
                     "Error loading history: " + e.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private String truncateText(String text, int maxLength) {
-        if (text == null || text.length() <= maxLength) {
-            return text;
-        }
-        return text.substring(0, maxLength) + "...";
-    }
-
-    // Helper method to convert backend format to UI format
-    private String convertToUIFormat(String backendValue) {
-        if (backendValue == null)
-            return null;
-        switch (backendValue) {
-            case "HIGH":
-                return "High";
-            case "MEDIUM":
-                return "Medium";
-            case "LOW":
-                return "Low";
-            case "PENDING":
-                return "Pending";
-            case "IN_PROGRESS":
-                return "In Progress";
-            case "COMPLETED":
-                return "Completed";
-            default: {
-                // Convert SOME_TEXT to Some Text
-                String[] words = backendValue.toLowerCase().split("_");
-                StringBuilder result = new StringBuilder();
-                for (String word : words) {
-                    if (result.length() > 0)
-                        result.append(" ");
-                    result.append(Character.toUpperCase(word.charAt(0)));
-                    if (word.length() > 1)
-                        result.append(word.substring(1));
-                }
-                return result.toString();
-            }
         }
     }
 }
