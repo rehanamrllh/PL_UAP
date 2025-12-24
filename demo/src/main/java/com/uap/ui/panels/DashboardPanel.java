@@ -3,14 +3,9 @@ package com.uap.ui.panels;
 import com.uap.data.DataManager;
 import com.uap.ui.UIColors;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class DashboardPanel extends JPanel {

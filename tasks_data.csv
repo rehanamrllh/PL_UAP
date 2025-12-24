@@ -1,2 +1,20 @@
+1,Belajar Java,,Medium,Completed,2025-12-24,2025-12-24
 2,Belajar Java,,Medium,Completed,2025-12-24,2025-12-24
-3,asep,	,High,Completed,2025-12-24,2025-12-31
+3,Kerjakan UAP Pemrograman Lanjut,Buat laporan dan rapikan kode,High,Pending,2025-12-24,2025-12-28
+4,Baca materi Swing UI,Belajar JTable dan RowFilter,Medium,Pending,2025-12-24,2025-12-27
+5,Latihan OOP Java,Inheritance dan polymorphism,Medium,Completed,2025-12-20,2025-12-21
+6,Perbaiki bug input tanggal,Cek parsing LocalDate,High,Pending,2025-12-24,2025-12-26
+7,Rapikan struktur package,Samakan naming class,Low,Pending,2025-12-24,2025-12-30
+8,Testing fitur Add Task,Uji validasi field,High,Pending,2025-12-24,2025-12-25
+9,Testing fitur Edit Task,Uji update ke CSV,High,Pending,2025-12-24,2025-12-25
+10,Testing fitur Delete Task,Uji hapus dan refresh UI,Medium,Pending,2025-12-24,2025-12-25
+11,Buat dokumentasi README,Tulis cara run proyek,Medium,Pending,2025-12-24,2025-12-29
+12,Review kebutuhan UAP,Cek rubric penilaian,High,Completed,2025-12-18,2025-12-18
+13,Commit progress,Catat perubahan utama,Low,Pending,2025-12-24,2025-12-24
+14,Cek konsistensi status,Pending dan Completed saja,Medium,Pending,2025-12-24,2025-12-26
+15,Bersihkan data dummy,Hapus task tidak relevan,Low,Pending,2025-12-24,2025-12-31
+16,Belajar TableRowSorter,Pahami filter dan sorting,Medium,Completed,2025-12-22,2025-12-22
+17,Buat daftar prioritas,Low Medium High,Low,Pending,2025-12-24,2025-12-27
+18,Optimasi loadTableData,Pastikan refresh cepat,Medium,Pending,2025-12-24,2025-12-28
+19,Audit UI colors,Sesuai tema aplikasi,Low,Completed,2025-12-19,2025-12-19
+20,Validasi title tidak kosong,Blok submit jika kosong,High,Pending,2025-12-24,2025-12-26
