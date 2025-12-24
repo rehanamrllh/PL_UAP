@@ -54,7 +54,8 @@
 - Maven 3.6+
 - IDE pilihan Anda (IntelliJ IDEA, Eclipse, VS Code, dll.)
 
-### Build & Jalankan via Terminal
+### Build & Jalankan (javac)
+
 > Jalankan dari folder `demo/` agar file `tasks_data.csv` tersimpan di folder itu.
 
 #### Windows (PowerShell)
@@ -66,6 +67,19 @@ New-Item -ItemType Directory -Force out | Out-Null
 $src = Get-ChildItem -Recurse -Filter *.java src\main\java | ForEach-Object { $_.FullName }
 javac -encoding UTF-8 -d out $src
 
+java -cp out com.uap.app.ToDoApp
+```
+
+#### Linux / macOS (bash/zsh)
+
+```bash
+cd demo
+mkdir -p out
+
+# compile semua .java di src/main/java
+javac -encoding UTF-8 -d out $(find src/main/java -name "*.java")
+
+# jalankan aplikasi
 java -cp out com.uap.app.ToDoApp
 ```
 
