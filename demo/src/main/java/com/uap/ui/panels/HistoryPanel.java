@@ -27,7 +27,7 @@ public class HistoryPanel extends JPanel {
         add(title, BorderLayout.NORTH);
 
         // Only showing Completed Tasks Table for history
-        String[] cols = { "ID", "Title", "Description", "Priority", "Completed Date" };
+        String[] cols = { "ID", "Title", "Description", "Priority", "Due Date" };
         model = new DefaultTableModel(cols, 0);
         JTable table = new JTable(model);
         table.setRowHeight(30);

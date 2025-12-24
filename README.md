@@ -1,234 +1,225 @@
-# 📋 To-Do List Manager
+# 📋 Manajer Daftar Tugas (To-Do List)
 
-> **Modern Task Management Application built with Java Swing**
+> **Aplikasi manajemen tugas modern yang dibangun dengan Java Swing**
 
 <div align="center">
 
 ![Java](https://img.shields.io/badge/Java-11+-orange.svg)
 ![Maven](https://img.shields.io/badge/Maven-3.6+-blue.svg)
-![License](https://img.shields.io/badge/License-Academic-green.svg)
+![License](https://img.shields.io/badge/License-Akademik-green.svg)
 
 **UAP Pemrograman Lanjut 2025** | Universitas Muhammadiyah Malang
 
-[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Project Structure](#-project-structure)
+[Fitur](#-fitur) • [Instalasi](#-instalasi) • [Penggunaan](#-penggunaan) • [Struktur Proyek](#-struktur-proyek)
 
 </div>
 
 ---
 
-## 📸 Preview
+## 📸 Pratinjau
 
-![Dashboard Preview](demo/screenshots/dashboard.png)
->Dashboard with real-time statistics and quick actions.
+![Pratinjau Dashboard](demo/screenshots/dashboard.png)
+>Dashboard dengan statistik real-time dan aksi cepat.
 
-![Task List Preview](demo/screenshots/task_list.png)
->Interactive task list with sorting and filtering.
+![Pratinjau Daftar Tugas](demo/screenshots/task_list.png)
+>Daftar tugas interaktif dengan pengurutan dan pemfilteran.
 
-![Add Task Preview](demo/screenshots/add_tasks.png)
->User-friendly form for adding and editing tasks.
+![Pratinjau Tambah Tugas](demo/screenshots/add_tasks.png)
+>Form yang ramah pengguna untuk menambah dan mengedit tugas.
 
-![History & Stats Preview](demo/screenshots/history_stats.png)
->Visual representation of completed tasks and statistics.
-
----
-
-## ✨ Features
-
-- **Modern GUI** with Java Swing
-- **Data Persistence** using CSV files
-- **Real-time Search** and filtering
-- **Statistics Dashboard** with visualizations
-- **Complete CRUD** functionality
-- **Auto-increment numeric ID** (1,2,3,...) for tasks
-- **LocalDate handling** (created date + due date)
-- **Simple Date Picker** (spinner-based)
-- **Comprehensive Error Handling**
+![Pratinjau Riwayat & Statistik](demo/screenshots/history_stats.png)
+>Representasi visual dari tugas yang selesai dan statistik.
 
 ---
 
-## 🚀 Installation
+## ✨ Fitur
 
-### Prerequisites
+- **GUI modern** dengan Java Swing
+- **Penyimpanan data** menggunakan file CSV
+- **Pencarian real-time** dan pemfilteran
+- **Dashboard statistik** dengan visualisasi
+- **Fungsionalitas CRUD lengkap**
+- **ID numerik auto-increment** (1,2,3,...) untuk tugas
+- **Penanganan LocalDate** (tanggal dibuat + tenggat)
+- **Pemilih tanggal sederhana** (berbasis spinner)
+- **Penanganan error yang komprehensif**
 
-- Java JDK 11 or higher
+---
+
+## 🚀 Instalasi
+
+### Prasyarat
+
+- Java JDK 11 atau lebih baru
 - Maven 3.6+
-- An IDE of your choice (IntelliJ IDEA, Eclipse, VS Code, etc.)
+- IDE pilihan Anda (IntelliJ IDEA, Eclipse, VS Code, dll.)
 
-### Build & Run
+### Build & Jalankan via Terminal
+> Jalankan dari folder `demo/` agar file `tasks_data.csv` tersimpan di folder itu.
 
-```bash
-# Clone or download the project
+#### Windows (PowerShell)
+
+```powershell
 cd demo
+New-Item -ItemType Directory -Force out | Out-Null
 
-# Compile the project
-mvn clean compile
+$src = Get-ChildItem -Recurse -Filter *.java src\main\java | ForEach-Object { $_.FullName }
+javac -encoding UTF-8 -d out $src
 
-# Run the application (recommended)
-mvn -DskipTests package
-java -jar target/demo-1.0-SNAPSHOT.jar
-
-# Alternative (VS Code / direct run)
-# Main class: com.uap.app.ToDoApp
-# Compatibility launcher: com.uap.ToDoApp
-
-# (Optional) Package the application
-mvn package
+java -cp out com.uap.app.ToDoApp
 ```
 
 ---
 
-## 📝 Usage
+## 📝 Penggunaan
 
-1. **Run the application** using one of the methods above.
-2. **Add a new task** via the "Add Task" menu.
-3. **View all tasks** in the "Task List" section.
-4. **Edit a task** using the Edit button.
-5. **Delete a task** using the Delete button.
-6. **View history** in the "History" menu.
+1. **Jalankan aplikasi** menggunakan salah satu metode di atas.
+2. **Tambahkan tugas baru** melalui menu "Add Task".
+3. **Lihat semua tugas** pada bagian "Task List".
+4. **Edit tugas** menggunakan tombol Edit.
+5. **Hapus tugas** menggunakan tombol Delete.
+6. **Lihat riwayat** pada menu "History".
 
-Data is stored in a CSV file named `tasks_data.csv` in the current working directory.
-If you want to reset the app data, delete that file.
+Data disimpan dalam file CSV bernama `tasks_data.csv` di direktori kerja saat ini.
+Jika ingin mengatur ulang data aplikasi, hapus file tersebut.
 
 ---
 
-## 🎯 Main Features
+## 🎯 Fitur Utama
 
 ### 1️⃣ Dashboard
-- Real-time statistics (Total, Completed, Pending, Completion Rate)
-- Quick actions for fast navigation
-- Visual cards with icons
+- Statistik real-time (Total, Selesai, Tertunda, Tingkat Penyelesaian)
+- Aksi cepat untuk navigasi yang lebih cepat
+- Kartu visual dengan ikon
 
-### 2️⃣ Task List
-- Interactive table with sorting
-- Real-time search
-- Filter by status (ALL / Pending / Completed)
-- Edit/Delete/Complete actions via buttons
+### 2️⃣ Daftar Tugas
+- Tabel interaktif dengan pengurutan
+- Pencarian real-time
+- Filter berdasarkan status (ALL / Pending / Completed)
+- Aksi Edit/Hapus/Selesai melalui tombol
 
-### 3️⃣ Add/Edit Task
-- Input form with validation
-- Dropdowns for Priority & Status
-- Error handling with dialog
-- Dual mode (Add/Edit)
+### 3️⃣ Tambah/Edit Tugas
+- Form input dengan validasi
+- Dropdown untuk Prioritas & Status
+- Penanganan error dengan dialog
+- Mode ganda (Tambah/Edit)
 
-### 4️⃣ History & Statistics
-- History of completed tasks
-- Tracking of completion rate
-- Statistics based on priority
-- Visual representation
-
----
-
-## 💻 Technologies Used
-
-- **Java** (tested with JDK 21; source/target configured by Maven)
-- **Java Swing** for GUI
-- **Maven** for build management
-- **CSV** for data storage
-- **LocalDate** for date handling
-- **ArrayList & Stream API** for data manipulation
+### 4️⃣ Riwayat & Statistik
+- Riwayat tugas yang selesai
+- Pelacakan tingkat penyelesaian
+- Statistik berdasarkan prioritas
+- Representasi visual
 
 ---
 
-## 📁 Project Structure
+## 💻 Teknologi yang Digunakan
+
+- **Java** (diuji dengan JDK 21; source/target dikonfigurasi oleh Maven)
+- **Java Swing** untuk GUI
+- **Maven** untuk manajemen build
+- **CSV** untuk penyimpanan data
+- **LocalDate** untuk penanganan tanggal
+- **ArrayList & Stream API** untuk manipulasi data
+
+---
+
+## 📁 Struktur Proyek
 
 ```
 demo/
 ├── src/main/java/com/uap/
-│   └── ToDoApp.java                 # Compatibility launcher (calls com.uap.app.ToDoApp)
+│   └── ToDoApp.java                 # Launcher kompatibilitas (memanggil com.uap.app.ToDoApp)
 ├── src/main/java/com/uap/app/
-│   └── ToDoApp.java                 # Main entry point (JFrame + navigation)
+│   └── ToDoApp.java                 # Titik masuk utama (JFrame + navigasi)
 ├── src/main/java/com/uap/data/
-│   └── DataManager.java             # CSV load/save + ID generation
+│   └── DataManager.java             # Load/save CSV + pembuatan ID
 ├── src/main/java/com/uap/model/
-│   └── Task.java                    # Model (LocalDate created/due)
+│   └── Task.java                    # Model (LocalDate dibuat/tenggat)
 ├── src/main/java/com/uap/ui/
-│   ├── LocalDatePickerField.java    # Simplified date picker (spinner)
-│   ├── UIColors.java                # Theme colors
-│   └── UIUtils.java                 # UI helpers
+│   ├── LocalDatePickerField.java    # Pemilih tanggal sederhana (spinner)
+│   ├── UIColors.java                # Warna tema
+│   └── UIUtils.java                 # Helper UI
 └── src/main/java/com/uap/ui/panels/
 	├── DashboardPanel.java
 	├── TaskListPanel.java
 	├── AddTaskPanel.java
 	└── HistoryPanel.java
 
-└── pom.xml                    # Maven config
+└── pom.xml                    # Konfigurasi Maven
 ```
 
 ---
 
 ### Dashboard
-- Modern interface with statistics cards
-- Color-coded information for quick insights
-- Quick action buttons for fast navigation
+- Antarmuka modern dengan kartu statistik
+- Informasi berkode warna untuk wawasan cepat
+- Tombol aksi cepat untuk navigasi yang lebih cepat
 
-### Task List
-- Sortable and filterable table
-- Real-time search functionality
-- Filter by status and priority
+### Daftar Tugas
+- Tabel yang dapat diurutkan dan difilter
+- Fungsionalitas pencarian real-time
+- Filter berdasarkan status dan prioritas
 
-### Input Form
-- Clean and user-friendly form layout
-- Input validation with user-friendly error messages
-- Dropdowns for easy selection of priority and status
+### Form Input
+- Tata letak form yang rapi dan ramah pengguna
+- Validasi input dengan pesan kesalahan yang ramah pengguna
+- Dropdown untuk memudahkan pemilihan prioritas dan status
 
-### History
-- Overview of completed tasks
-- Visual statistics for performance tracking
-- Progress tracking over time
+### Riwayat
+- Ringkasan tugas yang selesai
+- Statistik visual untuk pelacakan performa
+- Pelacakan progres dari waktu ke waktu
 
 ---
 
-## 🔧 Development
+## 🔧 Pengembangan
 
-### Prerequisites
-- Java JDK 11 or higher
+### Prasyarat
+- Java JDK 11 atau lebih baru
 - Maven 3.6+
 - IDE (IntelliJ IDEA / Eclipse / VS Code)
 
-### Build & Run
+### Build & Jalankan
 ```bash
-# Clone or extract project
+# Clone atau ekstrak proyek
 cd demo
 
-# Compile
+# Kompilasi
 mvn clean compile
 
-# Run (jar)
+# Jalankan (jar)
 mvn -DskipTests package
 java -jar target/demo-1.0-SNAPSHOT.jar
 
-# Package (optional)
+# Package (opsional)
 mvn package
 ```
 
 ---
 
-## 🎓 Learning Outcomes
+## 🎓 Capaian Pembelajaran
 
 Proyek ini mengimplementasikan konsep dari **Modul 1-6**:
 
-1. **Java Basics & OOP** - Classes, inheritance, encapsulation
+1. **Dasar Java & OOP** - Kelas, pewarisan, enkapsulasi
 2. **Collections** - ArrayList, generics, Stream API
-3. **Exception Handling** - Try-catch, validation
-4. **File I/O** - CSV operations, data persistence
-5. **GUI Development** - Swing components, event handling
+3. **Penanganan Exception** - Try-catch, validasi
+4. **File I/O** - Operasi CSV, penyimpanan data
+5. **Pengembangan GUI** - Komponen Swing, penanganan event
 6. **Design Patterns** - MVC, Observer, Strategy
 
+---
+
+## 📄 Lisensi
+
+Proyek ini dibuat untuk keperluan akademik (UAP Pemrograman Lanjut 2025).
 
 ---
 
-## 📄 License
-
-Project ini dibuat untuk keperluan akademik (UAP Pemrograman Lanjut 2025).
-
----
-
-
-
-**🚀 Ready to use! Happy Task Managing!**
+**🚀 Siap digunakan! Selamat mengelola tugas!**
 
 *UAP Pemrograman Lanjut 2025 - Universitas Muhammadiyah Malang*
 
-**Link Repository:** [https://github.com/rehanamrllh/PL_UAP](https://github.com/rehanamrllh/PL_UAP)
+**Tautan Repository:** [https://github.com/rehanamrllh/PL_UAP](https://github.com/rehanamrllh/PL_UAP)
 
 ---
