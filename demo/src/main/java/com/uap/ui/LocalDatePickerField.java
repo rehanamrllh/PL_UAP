@@ -41,7 +41,6 @@ public class LocalDatePickerField extends JPanel {
         add(textField, BorderLayout.CENTER);
         add(pickerButton, BorderLayout.EAST);
 
-        // Parse typed date on focus lost (so API stays in sync)
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
@@ -102,14 +101,12 @@ public class LocalDatePickerField extends JPanel {
         calendarPanel.setBackground(Color.WHITE);
 
         Calendar calendar = Calendar.getInstance();
-        // initialize month view based on current text, if valid
         try {
             LocalDate current = getDate();
             if (current != null) {
                 calendar.set(current.getYear(), current.getMonthValue() - 1, current.getDayOfMonth());
             }
         } catch (DateTimeParseException ignored) {
-            // keep today
         }
 
         final Calendar viewCal = (Calendar) calendar.clone();

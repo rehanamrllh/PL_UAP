@@ -66,7 +66,6 @@ public class AddTaskPanel extends JPanel {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Form Fields
         addFormRow(formPanel, gbc, 0, "Task Title:*", txtTitle = new JTextField(20));
 
         txtDesc = new JTextArea(4, 20);
@@ -84,7 +83,6 @@ public class AddTaskPanel extends JPanel {
 
         add(formPanel, BorderLayout.CENTER);
 
-        // Buttons
         JPanel btnPanel = new JPanel();
         btnPanel.setBackground(UIColors.BG_COLOR);
         btnSave = UIUtils.createStyledButton("Save Task", UIColors.BTN_GREEN);
@@ -94,7 +92,6 @@ public class AddTaskPanel extends JPanel {
         btnPanel.add(btnClear);
         add(btnPanel, BorderLayout.SOUTH);
 
-        // Actions
         btnClear.addActionListener(e -> resetToAddMode());
         btnSave.addActionListener(e -> saveTask());
     }

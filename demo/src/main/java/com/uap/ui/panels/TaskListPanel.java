@@ -48,13 +48,11 @@ public class TaskListPanel extends JPanel {
         setBackground(UIColors.BG_COLOR);
         setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        // Header
         JLabel title = new JLabel("Task List");
         title.setFont(new Font("Segoe UI", Font.BOLD, 24));
         title.setForeground(UIColors.SIDEBAR_COLOR);
         add(title, BorderLayout.NORTH);
 
-        // Filter Bar
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         filterPanel.setBackground(UIColors.BG_COLOR);
 
@@ -70,7 +68,6 @@ public class TaskListPanel extends JPanel {
         filterPanel.add(statusFilter);
         filterPanel.add(btnClear);
 
-        // Table
         String[] cols = { "ID", "Title", "Description", "Priority", "Status", "Created", "Due Date" };
         model = new DefaultTableModel(cols, 0) {
             public boolean isCellEditable(int row, int column) {
@@ -85,7 +82,6 @@ public class TaskListPanel extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(table);
 
-        // Buttons
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnPanel.setBackground(UIColors.BG_COLOR);
 
@@ -99,7 +95,6 @@ public class TaskListPanel extends JPanel {
         btnPanel.add(btnEdit);
         btnPanel.add(btnDelete);
 
-        // Grouping Table and Filters
         JPanel centerContainer = new JPanel(new BorderLayout(0, 10));
         centerContainer.setBackground(UIColors.BG_COLOR);
         centerContainer.add(filterPanel, BorderLayout.NORTH);
@@ -108,7 +103,6 @@ public class TaskListPanel extends JPanel {
 
         add(centerContainer, BorderLayout.CENTER);
 
-        // Events
         searchField.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
                 filterTable();

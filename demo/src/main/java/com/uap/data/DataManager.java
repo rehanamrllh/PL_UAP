@@ -59,7 +59,7 @@ public class DataManager {
                     maxId = numericId;
                 }
             } catch (NumberFormatException ignored) {
-                // If older data contains non-numeric IDs, ignore them for sequencing.
+              
             }
         }
         return String.valueOf(maxId + 1);

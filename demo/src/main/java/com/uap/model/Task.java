@@ -6,8 +6,8 @@ public class Task {
     private final String id;
     private String title;
     private String description;
-    private String priority; // High, Medium, Low
-    private String status; // Pending, Completed
+    private String priority;
+    private String status; 
     private final LocalDate createdDate;
     private LocalDate dueDate;
 
