@@ -89,11 +89,13 @@ public class TaskListPanel extends JPanel {
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnPanel.setBackground(UIColors.BG_COLOR);
 
-        JButton btnComplete = UIUtils.createStyledButton("Mark Completed", UIColors.BTN_GREEN);
+        JButton btnComplete = UIUtils.createStyledButton("Mark Completed", UIColors.BTN_GREY);
+        JButton btnAdd = UIUtils.createStyledButton("Add Task", UIColors.BTN_GREEN);
         JButton btnEdit = UIUtils.createStyledButton("Edit", UIColors.BTN_BLUE);
         JButton btnDelete = UIUtils.createStyledButton("Delete", UIColors.BTN_RED);
 
         btnPanel.add(btnComplete);
+        btnPanel.add(btnAdd);
         btnPanel.add(btnEdit);
         btnPanel.add(btnDelete);
 
@@ -119,18 +121,6 @@ public class TaskListPanel extends JPanel {
             filterTable();
         });
 
-        btnDelete.addActionListener(e -> {
-            Task selected = getSelectedTaskFromTable();
-            if (selected == null) {
-                JOptionPane.showMessageDialog(this, "Please select a task first");
-                return;
-            }
-            dataManager.deleteTask(selected.getId());
-            loadTableData();
-            refreshAll.run();
-            JOptionPane.showMessageDialog(this, "Task Deleted!");
-        });
-
         btnComplete.addActionListener(e -> {
             Task selected = getSelectedTaskFromTable();
             if (selected == null) {
@@ -143,6 +133,8 @@ public class TaskListPanel extends JPanel {
             refreshAll.run();
         });
 
+        btnAdd.addActionListener(e -> startEdit.accept(null));
+
         btnEdit.addActionListener(e -> {
             Task selected = getSelectedTaskFromTable();
             if (selected == null) {
@@ -151,6 +143,31 @@ public class TaskListPanel extends JPanel {
             }
             startEdit.accept(selected);
         });
+        
+        btnDelete.addActionListener(e -> {
+            Task selected = getSelectedTaskFromTable();
+            if (selected == null) {
+                JOptionPane.showMessageDialog(this, "Please select a task first");
+                return;
+            }
+            
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to delete this task?\n\n" + selected.getTitle(),
+                    "Confirm Delete",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            dataManager.deleteTask(selected.getId());
+            loadTableData();
+            refreshAll.run();
+            JOptionPane.showMessageDialog(this, "Task Deleted!");
+        });
+
+
     }
 
     private Task getSelectedTaskFromTable() {
